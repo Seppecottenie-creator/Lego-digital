@@ -19,11 +19,10 @@ Communiceer met mij in het Nederlands (Vlaams). Alle tekst in het spel is Nederl
   versie zonder `examples/js` (vanaf r148 alleen ES-modules) zonder de laadwijze aan te passen.
 - **Mobiel eerst.** Moet werken op ~380 px breed, met touch (draaien met één vinger,
   zoomen/schuiven met twee). Geen horizontaal scrollen van de pagina.
-- **Geen merknamen of officiële content.** Niet de merknaam van de steentjes noemen, geen logo's op
-  de noppen, geen nagemaakte officiële sets en geen minifiguren.
-- **Eerbetonen mogen wel:** sets mogen gebaseerd zijn op bestaande films, series, plaatsen en mensen
-  (eigen ontwerp, geen logo's). Zet de bron in het veld `film` van de set; de doos toont dan
-  "geïnspireerd op …".
+- **Officiële sets mogen**, nagebouwd uit instructieboekjes of LDraw/Studio-bestanden. Daarom is de
+  repo **privé** (bouwinstructies zijn auteursrechtelijk beschermd): niet publiek publiceren.
+  Geen logo's op de noppen. Sets mogen ook gebaseerd zijn op films, series, plaatsen en mensen;
+  zet de bron in het veld `film` van de set, de doos toont dan "geïnspireerd op …".
 - **Stijl: modern.** Gebruik veel verschillende stenen: tegels om noppen weg te werken, gebogen
   schuine stenen, kaasjes, ronde/kwartronde tegels, metselstenen, roosters, bedrukte tegels,
   planten en kleuraccenten. Vermijd sets die enkel uit gewone stenen bestaan.
