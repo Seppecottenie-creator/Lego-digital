@@ -19,8 +19,14 @@ Communiceer met mij in het Nederlands (Vlaams). Alle tekst in het spel is Nederl
   versie zonder `examples/js` (vanaf r148 alleen ES-modules) zonder de laadwijze aan te passen.
 - **Mobiel eerst.** Moet werken op ~380 px breed, met touch (draaien met één vinger,
   zoomen/schuiven met twee). Geen horizontaal scrollen van de pagina.
-- **Geen merknamen of officiële content.** Niet de merknaam noemen, geen logo's op de noppen,
-  geen nagemaakte officiële sets of beschermde personages (ook geen minifiguren).
+- **Geen merknamen of officiële content.** Niet de merknaam van de steentjes noemen, geen logo's op
+  de noppen, geen nagemaakte officiële sets en geen minifiguren.
+- **Eerbetonen mogen wel:** sets mogen gebaseerd zijn op bestaande films, series, plaatsen en mensen
+  (eigen ontwerp, geen logo's). Zet de bron in het veld `film` van de set; de doos toont dan
+  "geïnspireerd op …".
+- **Stijl: modern.** Gebruik veel verschillende stenen: tegels om noppen weg te werken, gebogen
+  schuine stenen, kaasjes, ronde/kwartronde tegels, metselstenen, roosters, bedrukte tegels,
+  planten en kleuraccenten. Vermijd sets die enkel uit gewone stenen bestaan.
 - **Geen `alert()`, `confirm()` of `prompt()`** – bevestigingen gebeuren in de UI zelf
   (tweemaal tikken bij kopen en bij "voortgang wissen").
 - **localStorage altijd in try/catch** – het spel moet ook werken als opslag faalt.
@@ -37,13 +43,17 @@ en gebruikt geen DOM of three.js, zodat node het kan testen. Het tweede blok is 
 4. **Bouwhulp `Bld()`** – `add()`, `region()` (vlak opdelen in standaardstenen), `art()` (ASCII-laag).
    `decomp()` kiest zo groot mogelijke standaardstenen, wisselt de richting per laag (verspringende
    naden) en zoekt met terugkeren een opdeling waarin elke steen op een nop rust.
-   Verder: `ringA/ringB` (holle 4×4), `P1/P2` (massieve 4×4), `wallLayer` (muur met verspringende
-   stenen en openingen), `wall2` (muur van 2 dik), `stone` (grijze steenmix), `OCT6`.
+   Verder: `ringA/ringB` (holle 4×4, optioneel type), `P1/P2` (massieve 4×4), `wallLayer` (muur met
+   verspringende stenen en openingen; type `b`, `p` voor gevelplanken of `m` voor metselsteen),
+   `wall2` (muur van 2 dik), `stone` (grijze steenmix), `OCT6`, `bruggeHouse` (huis met trapgevel).
+   `c2w()` zet een canonieke cel om naar de wereld voor types met een richting (`DIRT`).
 5. **`setXxx()`-functies** genereren de raw-lijsten, **`SETS`** bevat de metadata.
 
 **Spelmotor**
 6. **Opslag `S`** onder key `steentjes-v1`:
-   `{coins, owned:[id], built:{id:aantal}, prog:{id:stapindex}, gift:'YYYY-M-D', mute, tut, seenCam}`.
+   `{v, coins, owned:[id], built:{id:aantal}, prog:{id:stapindex}, gift:'YYYY-M-D', mute, tut, seenCam}`.
+   `v:2` = moderne sets. Oude opslag (zonder `v`) wordt gemigreerd: car→delorean, house→up,
+   cafe→friends, castle→school, de raket wordt terugbetaald (480), `prog` wordt gewist.
    Vrij bouwen bewaart apart onder `steentjes-vrij-v1` (lijst raw-rijen).
    Bij een wijziging in het formaat: key ophogen of migreren, zodat bestaande voortgang niet breekt.
    Sets met prijs 0 zijn altijd in bezit (niet in `owned` opgeslagen).
@@ -58,7 +68,8 @@ en gebruikt geen DOM of three.js, zodat node het kan testen. Het tweede blok is 
    bouwen bij elk nieuw zakje alles samen te voegen (`freeze()`), zodat grote sets vlot blijven.
 9. **Materialen** – `mat(kleur)` (MeshPhysicalMaterial met clearcoat, `ENVI` = omgevingslicht),
    `gmat(kleur)` voor de doorschijnende "ghost", `decalMat()` tekent bedrukkingen op een canvas
-   (`oog`, `snuit`, `txt:TEKST`). Geen tonemapping: zo blijven de speelgoedkleuren verzadigd.
+   (`oog`, `snuit`, `txt:TEKST` en de tekeningen in `PRINTS`: `menu`, `klok`, `schilderij`, `tapijt`,
+   `boeken`, `tv`, `flux`, `kenteken`, `koffie`, `pizza`, `water`, `ramen`, `luik`, `wapen`, `bord`). Geen tonemapping: zo blijven de speelgoedkleuren verzadigd.
 10. **Offscreen renderer `TR`** – `thumb(set)` en `icon(sig)` geven gecachete dataURL's.
 11. **Geluid** – gesynthetiseerd met WebAudio (`sfx('snap'|'pick'|'wrong'|'step'|'rip'|'done'|'coin')`).
 12. **Home** – `renderHome()`; klikken via event delegation op `data-a` (`gift`, `buy`, `build`,
@@ -76,11 +87,11 @@ en gebruikt geen DOM of three.js, zodat node het kan testen. Het tweede blok is 
 17. `loop()` – animaties, ghost-pulsen, camera; `resize()` schuift het beeld (`setViewOffset`)
     zodat het model tussen de bovenbalk en de onderdelenbak valt.
 
-Debug: `steentjes.html?view=castle` of `?build=cat`; `window.__steentjes` geeft toegang tot de staat.
+Debug: `steentjes.html?view=school` of `?build=cat`; `window.__steentjes` geeft toegang tot de staat.
 
 ## Setformaat
 ```js
-{ id:'house', name:'Huisje', no:1006, age:'9+', box:'#f3dca4', price:560, blurb:'…', raw:setHouse() }
+{ id:'up', name:'Huis met ballonnen', no:2001, age:'12+', box:'#bfe0f0', price:1500, film:'Up', blurb:'…', raw:setUp() }
 // raw = [[type, x, z, y, w, d, kleur, dir, label?], …]
 ```
 - Eenheden: `x`/`z` in noppen, `y` in **plaathoogtes** (een steen is 3 hoog).
@@ -103,8 +114,21 @@ Debug: `steentjes.html?view=castle` of `?build=cat`; `window.__steentjes` geeft 
 | `w` | wiel, voetafdruk 2×1, as langs z | 4 | nee |
 | `fl` / `bu` | bloemetje / struikje | 1 / 4 | nee |
 | `fg` / `st` | vlag / ster (2×2) | 10 / 4 | nee |
+| `cs` | gebogen schuine steen (richting) | 2 | nee |
+| `sc` | kaasje: kleine wig (richting) | 2 | nee |
+| `is` | omgekeerde schuine steen (richting) | 3 | ja |
+| `wp` | wigplaat (richting, `label 'm'` = gespiegeld) | 1 | enkel binnen de vorm |
+| `tr` / `tq` | ronde tegel / kwartronde tegel (richting) | 1 | nee |
+| `m` | metselsteen `L×1` met steenmotief | 3 | ja |
+| `g` | roostertegel | 1 | nee |
+| `pt` | bedrukte tegel, `label` = naam uit `PRINTS` | 1 | nee |
+| `j` | jumperplaat (één nop in het midden, draagt niets) | 1 | nee |
+| `pl` | plantje 1×1 of 2×2 | 3 / 5 | nee |
+| `bl` | ballon aan een touwtje, `label` 0–9 = variatie | 14 | nee |
+| `lp` | lantaarnpaal | 12 | nee |
 
-- **Schuine stenen (`s`):** `w` = breedte, `d` = diepte inclusief helling (`d=1` = wig zonder nop).
+- `v` met `label 'licht'` heeft verlicht (geel) glas.
+- **Types met een richting (`s`, `cs`, `sc`, `is`, `wp`, `tq`):** `w` = breedte, `d` = diepte inclusief helling (`d=1` = wig zonder nop).
   `dir` = kant waar de helling naar beneden gaat: `0` = +z, `1` = +x, `2` = −z, `3` = −x.
   Bij `dir` 1 of 3 wisselen breedte en diepte in de wereld.
 - **`e`:** `dir` = kant waar de bedrukking naar kijkt (zelfde nummering).
@@ -117,21 +141,21 @@ Bij een nieuwe set:
   onder de kop van Marcel).
 - Sets staan op de homepagina gesorteerd op prijs. Houd de progressie haalbaar met de beloningen
   plus het dagelijkse cadeau (40 munten). Huidige lijn: na elke set kan je (bijna) de volgende kopen;
-  voor de koffiebar en het kasteel moet je wat sparen.
+  voor de grote sets moet je soms even sparen.
 
 ## Huidige sets
-| id | naam | onderdelen | zakjes | prijs |
-|---|---|---|---|---|
-| pot | Bloempot | 34 | 1 | 0 |
-| tree | Appelboom | 71 | 2 | 150 |
-| car | Rode cabrio | 38 | 1 | 250 |
-| cat | Marcel de kat (onze kat, grijze British Shorthair) | 82 | 2 | 400 |
-| rocket | Raket | 83 | 2 | 480 |
-| house | Huisje | 149 | 4 | 560 |
-| xmas | Kerstboom | 162 | 4 | 850 |
-| light | Vuurtoren | 168 | 4 | 1000 |
-| cafe | Koffiebar | 218 | 5 | 1250 |
-| castle | Kasteel | 517 | 13 | 1900 |
+| id | naam | geïnspireerd op | onderdelen | zakjes | prijs |
+|---|---|---|---|---|---|
+| pot | Bloempot | – | 37 | 1 | 0 |
+| tree | Appelboom | – | 71 | 2 | 150 |
+| delorean | Tijdreisauto | Back to the Future | 67 | 2 | 300 |
+| cat | Marcel de kat (onze kat, grijze British Shorthair) | – | 86 | 2 | 450 |
+| friends | Koffiehuis met oranje bank | Friends | 136 | 3 | 600 |
+| xmas | Kerstboom | – | 162 | 4 | 800 |
+| light | Vuurtoren | – | 172 | 4 | 1000 |
+| brugge | Brugse gevels | – | 289 | 7 | 1200 |
+| up | Huis met ballonnen | Up | 317 | 8 | 1500 |
+| school | Tovenaarsschool | Harry Potter | 478 | 12 | 2000 |
 
 ## Ontwerp
 - Bewust één licht thema: een belichte werktafel. Achtergrond `#e4e9f0`, inkt `#1c2230`,
@@ -152,6 +176,6 @@ Bij een nieuwe set:
   tikken, terugkeren en verder bouwen na herladen, vrij bouwen, vitrine.
 
 ## Ideeën voor later
-- Meer sets: iets rond haar favoriete series/films (eigen ontwerp), een fiets, een molen.
+- Meer sets rond haar favoriete series/films (vraag welke!), een fiets, een molen.
 - Bouwboekje als overzicht om terug te bladeren naar eerdere stappen.
 - Prestaties: bij heel oude toestellen de pixelratio verlagen.

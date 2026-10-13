@@ -82,6 +82,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 .card .lock{position:absolute;inset:0;background:linear-gradient(180deg,rgba(228,233,240,0) 40%,rgba(228,233,240,.55));z-index:0}
 .card .info{padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px;flex:1}
 .card .info b{font-size:16px;line-height:1.15}
+.card .info .film{font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
 .card .info .meta{font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
 .card .info p{margin:4px 0 8px;font-size:13px;color:var(--muted);line-height:1.3;flex:1}
 .card .acts{display:flex;gap:6px}
@@ -261,48 +262,59 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;paddin
 // ---------- Kleuren (echte steentjeskleuren) ----------
 const COL={
   white:'#f2f3f2', lgray:'#a0a5a9', dgray:'#6c6e68', black:'#27292d',
-  red:'#c91a09', dred:'#7f1310', orange:'#fe8a18', dorange:'#a95500', yellow:'#f2cd37', lorange:'#f8bb3d',
-  tan:'#e4cd9e', dtan:'#958a73', brown:'#5c2c17', nougat:'#d09168', terra:'#b8562f',
-  green:'#237841', bgreen:'#4b9f4a', lime:'#a5ca18', sgreen:'#9fbcab', dgreen:'#184632',
+  red:'#c91a09', dred:'#7f1310', orange:'#fe8a18', dorange:'#a95500', yellow:'#f2cd37', lorange:'#f8bb3d', lyellow:'#f6e38c',
+  tan:'#e4cd9e', dtan:'#958a73', brown:'#5c2c17', dbrown:'#352219', nougat:'#d09168', lnougat:'#f3cfb3', mnougat:'#aa7d55', terra:'#b8562f',
+  green:'#237841', bgreen:'#4b9f4a', lime:'#a5ca18', sgreen:'#9fbcab', dgreen:'#184632', olive:'#8a8b4e', teal:'#18898f',
   blue:'#0055bf', dblue:'#1a3a6b', azure:'#36aebf', dazure:'#078bc9', sblue:'#6a7fa8', lblue:'#9fc3e9',
-  pink:'#f2a7c3', dpink:'#c8508a', lav:'#cda4de', mlav:'#ac78ba',
-  gold:'#c9a13f', silver:'#a9afb4', lamp:'#ffe27a',
-  tclear:'#e9f3f6', tlblue:'#9fdde6', tred:'#e8301f', tyellow:'#f7d117', torange:'#f58a1f'
+  pink:'#f2a7c3', dpink:'#c8508a', coral:'#ff6f61', lav:'#cda4de', mlav:'#ac78ba', dpurple:'#4b2f6b',
+  gold:'#c9a13f', silver:'#a9afb4', lamp:'#ffe27a', slate:'#4d5664',
+  tclear:'#e9f3f6', tlblue:'#9fdde6', tred:'#e8301f', tyellow:'#f7d117', torange:'#f58a1f', tblue:'#3d8fe0', tpink:'#f48fc0', tsmoke:'#4c5560'
 };
 const COLN={white:'wit',lgray:'lichtgrijs',dgray:'donkergrijs',black:'zwart',red:'rood',dred:'donkerrood',
-  orange:'oranje',dorange:'donkeroranje',yellow:'geel',lorange:'lichtoranje',tan:'zandkleur',dtan:'donker zand',
-  brown:'bruin',nougat:'nougat',terra:'terracotta',green:'groen',bgreen:'lichtgroen',lime:'limoen',
-  sgreen:'saliegroen',dgreen:'donkergroen',blue:'blauw',dblue:'donkerblauw',azure:'azuur',dazure:'donker azuur',
-  sblue:'grijsblauw',lblue:'lichtblauw',pink:'roze',dpink:'donkerroze',lav:'lavendel',mlav:'paars',
-  gold:'goud',silver:'zilver',lamp:'lampgeel',tclear:'doorzichtig',tlblue:'glasblauw',tred:'doorzichtig rood',
-  tyellow:'doorzichtig geel',torange:'doorzichtig oranje'};
-const TRANS=new Set(['tclear','tlblue','tred','tyellow','torange']);
+  orange:'oranje',dorange:'donkeroranje',yellow:'geel',lorange:'lichtoranje',lyellow:'lichtgeel',tan:'zandkleur',dtan:'donker zand',
+  brown:'bruin',dbrown:'donkerbruin',nougat:'nougat',lnougat:'licht nougat',mnougat:'midden nougat',terra:'terracotta',
+  green:'groen',bgreen:'lichtgroen',lime:'limoen',sgreen:'saliegroen',dgreen:'donkergroen',olive:'olijf',teal:'petrol',
+  blue:'blauw',dblue:'donkerblauw',azure:'azuur',dazure:'donker azuur',sblue:'grijsblauw',lblue:'lichtblauw',
+  pink:'roze',dpink:'donkerroze',coral:'koraal',lav:'lavendel',mlav:'paars',dpurple:'donkerpaars',
+  gold:'goud',silver:'zilver',lamp:'lampgeel',slate:'leisteen',tclear:'doorzichtig',tlblue:'glasblauw',tred:'doorzichtig rood',
+  tyellow:'doorzichtig geel',torange:'doorzichtig oranje',tblue:'doorzichtig blauw',tpink:'doorzichtig roze',tsmoke:'getint glas'};
+const TRANS=new Set(['tclear','tlblue','tred','tyellow','torange','tblue','tpink','tsmoke']);
 
 // ---------- Hoogte per type, in plaathoogtes ----------
 // b steen, p plaat, t tegel, s schuin, c rond, cp rond plaatje, w wiel, k kegel, d koepel, a boog,
-// v raam, dr deur, fl bloemetje, bu struik, e bedrukte steen, fg vlag, st ster
-const HGT={b:3,p:1,t:1,s:3,c:3,cp:1,w:4,k:3,d:3,a:(w,d)=>Math.max(w,d)>=6?6:3,v:6,dr:9,fl:1,bu:4,e:3,fg:10,st:4};
+// v raam, dr deur, fl bloemetje, bu struik, e bedrukte steen, fg vlag, st ster,
+// cs gebogen schuine steen, sc kaasje (kleine wig), tr ronde tegel, tq kwartronde tegel, wp wigplaat,
+// is omgekeerde schuine steen, m metselsteen, g roostertegel, pt bedrukte tegel, pl plantje,
+// bl ballon, lp lantaarnpaal, j jumperplaat
+const HGT={b:3,p:1,t:1,s:3,c:3,cp:1,w:4,k:3,d:3,a:(w,d)=>Math.max(w,d)>=6?6:3,v:6,dr:9,fl:1,bu:4,e:3,fg:10,st:4,
+  cs:2,sc:2,tr:1,tq:1,wp:1,is:3,m:3,g:1,pt:1,pl:(w,d)=>w>=2?5:3,bl:14,lp:12,j:1};
 const hOf=(t,w,d)=>typeof HGT[t]==='function'?HGT[t](w,d):HGT[t];
+// Types met een richting (dir): breedte/diepte wisselen in de wereld bij dir 1 en 3
+const DIRT=new Set(['s','cs','sc','wp','is','tq']);
 
 // Van een raw-rij naar een onderdeel-object. X/Z = voetafdruk in de wereld.
 function P(r,i){
   const [t,x,z,y,w,d,c,dir=0,lab]=r;
-  const sw=t==='s'&&(dir===1||dir===3);
+  const sw=DIRT.has(t)&&(dir===1||dir===3);
   return {t,x,z,y,w,d,c,dir,lab,i,X:sw?d:w,Z:sw?w:d,h:hOf(t,w,d)};
 }
+// canonieke cel (i langs breedte, j van achter naar voor) -> wereldcel
+function c2w(b,i,j){
+  const {x,z,w,d}=b;
+  switch(b.dir){case 1:return [x+j,z+(w-1-i)];case 2:return [x+(w-1-i),z+(d-1-j)];case 3:return [x+(d-1-j),z+i];default:return [x+i,z+j];}
+}
+// wigplaat: rechthoek met één schuin afgesneden hoek (lab 'm' = gespiegeld)
+function wpInside(b,i,j){const c=Math.min(b.w,b.d),u=b.lab==='m'?b.w-1-i:i;return (u+0.5)+(j+0.5)<=b.w+b.d-c+0.01;}
 // Cellen met noppen bovenop (wereldcoördinaten)
-const STUDDED=new Set(['b','p','c','cp','a','v','dr','e','k']);
+const STUDDED=new Set(['b','p','c','cp','a','v','dr','e','k','is','m']);
 function studCells(b){
   const o=[];
   if(STUDDED.has(b.t)){
     for(let i=0;i<b.X;i++)for(let j=0;j<b.Z;j++)o.push([b.x+i,b.z+j]);
   }else if(b.t==='s'&&b.d>=2){
-    for(let i=0;i<b.w;i++){
-      if(b.dir===0)o.push([b.x+i,b.z]);
-      else if(b.dir===2)o.push([b.x+i,b.z+b.d-1]);
-      else if(b.dir===1)o.push([b.x,b.z+i]);
-      else o.push([b.x+b.d-1,b.z+i]);
-    }
+    for(let i=0;i<b.w;i++)o.push(c2w(b,i,0));
+  }else if(b.t==='wp'){
+    for(let i=0;i<b.w;i++)for(let j=0;j<b.d;j++)if(wpInside(b,i,j))o.push(c2w(b,i,j));
   }
   return o;
 }
@@ -315,7 +327,9 @@ function cellsOf(b){
 const STD={
   b:[[1,1],[1,2],[1,3],[1,4],[1,6],[1,8],[2,2],[2,3],[2,4],[2,6],[2,8]],
   p:[[1,1],[1,2],[1,3],[1,4],[1,6],[1,8],[2,2],[2,3],[2,4],[2,6],[2,8],[4,4],[4,6],[4,8],[6,6],[6,8],[8,8]],
-  t:[[1,1],[1,2],[1,3],[1,4],[1,6],[1,8],[2,2],[2,4]]
+  t:[[1,1],[1,2],[1,3],[1,4],[1,6],[1,8],[2,2],[2,4]],
+  m:[[1,1],[1,2],[1,3],[1,4]], g:[[1,1],[1,2],[2,2]], tr:[[1,1],[2,2]], tq:[[1,1],[2,2]], cs:[[1,1],[1,2],[1,3],[1,4],[2,2]], sc:[[1,1],[1,2],[2,2]],
+  is:[[1,2],[2,2],[1,3],[2,3]], wp:[[2,2],[2,3],[2,4],[2,6],[3,3],[4,4],[3,6],[4,6],[4,8]]
 };
 // Een vlak (lijst cellen) opdelen in zo groot mogelijke standaardstenen.
 // alt wisselt de voorkeursrichting per laag zodat de naden verspringen (zoals echt).
@@ -390,12 +404,12 @@ function Bld(){
         let L=leg[ch]; if(typeof L==='string'||typeof L==='function')L={c:L};
         const t=L.t||o.t||'b', cells=groups.get(ch);
         if(L.one){ for(const [x,z] of cells)B.add(t,x,z,y,L.w||1,L.d||1,L.c,L.dir||0,L.lab); }
-        else if(t==='s'){ // wiggen (1 diep) samenvoegen tot rijen van max 4 breed
+        else if(t==='s'||t==='cs'||t==='sc'){ // wiggen (1 diep) samenvoegen tot rijen van max 4 breed
           const horiz=L.dir===0||L.dir===2, lines=new Map();
           for(const [x,z] of cells){const k=horiz?z:x;if(!lines.has(k))lines.set(k,[]);lines.get(k).push(horiz?x:z);}
           for(const [k,arr] of lines){arr.sort((a,b)=>a-b);let i=0;
             while(i<arr.length){let j=i;while(j+1<arr.length&&arr[j+1]===arr[j]+1&&j-i<3)j++;
-              const len=j-i+1,s=arr[i]; if(horiz)B.add('s',s,k,y,len,1,L.c,L.dir);else B.add('s',k,s,y,len,1,L.c,L.dir);i=j+1;}}
+              const len=j-i+1,s=arr[i]; if(horiz)B.add(t,s,k,y,len,1,L.c,L.dir);else B.add(t,k,s,y,len,1,L.c,L.dir);i=j+1;}}
         }
         else B.region(t,y,cells,L.c,{alt:o.alt,max:L.max||o.max});
       }
@@ -417,7 +431,8 @@ function splitRun(L,k){
   return out;
 }
 // Eén laag van een rechthoekige muur (1 dik). Hoeken wisselen per laag van eigenaar.
-function wallLayer(B,x0,z0,W,D,y,k,c,skip){
+function wallLayer(B,x0,z0,W,D,y,k,c,skip,t){
+  t=t||'b';
   const ev=k%2===0,runs=[];
   const line=(cells,horiz)=>{let cur=[];const flush=()=>{if(cur.length)runs.push({cells:cur,horiz});cur=[];};
     for(const [x,z] of cells){if(skip&&skip(x,z,y))flush();else cur.push([x,z]);}flush();};
@@ -427,7 +442,7 @@ function wallLayer(B,x0,z0,W,D,y,k,c,skip){
   for(const x of [x0,x0+W-1]){const cs=[];for(let z=za;z<=zb;z++)cs.push([x,z]);line(cs,false);}
   for(const r of runs){let i=0;for(const L of splitRun(r.cells.length,k)){const [x,z]=r.cells[i];
     const col=typeof c==='function'?c(x,z,y):c;
-    if(r.horiz)B.add('b',x,z,y,L,1,col);else B.add('b',x,z,y,1,L,col);i+=L;}}
+    if(r.horiz)B.add(t,x,z,y,L,1,col);else B.add(t,x,z,y,1,L,col);i+=L;}}
 }
 // Muur van 2 dik (kasteel)
 function wall2(B,x,z,len,horiz,y,k,c,skip){
@@ -447,19 +462,18 @@ const OCT8=['..XXXX..','.XXXXXX.','XXXXXXXX','XXXXXXXX','XXXXXXXX','XXXXXXXX','.
 
 function setPot(){
   const B=Bld();
-  B.add('p',0,0,0,6,6,'terra');                      // schoteltje
-  ringA(B,1,1,1,'terra'); B.add('b',2,2,1,2,2,'brown');
-  ringB(B,1,1,4,'terra'); B.add('b',2,2,4,2,2,'brown');
-  ringA(B,1,1,7,'terra'); B.add('b',2,2,7,2,2,'brown');
-  B.add('p',0,0,10,6,2,'terra').add('p',0,4,10,6,2,'terra').add('p',0,2,10,2,2,'terra').add('p',4,2,10,2,2,'terra');
-  B.add('p',2,2,10,2,2,'brown');                      // potgrond
-  B.add('c',2,2,11,1,1,'green');
-  B.add('p',1,2,14,2,1,'bgreen');                     // blad
-  B.add('c',2,2,15,1,1,'green').add('fl',2,2,18,1,1,'red');
+  B.add('p',0,0,0,6,6,'terra');                      // schoteltje met ronde rand
+  B.add('tq',0,0,1,1,1,'terra',2).add('tq',5,0,1,1,1,'terra',1).add('tq',0,5,1,1,1,'terra',3).add('tq',5,5,1,1,1,'terra',0);
+  B.add('t',1,0,1,4,1,'terra').add('t',1,5,1,4,1,'terra').add('t',0,1,1,1,4,'terra').add('t',5,1,1,1,4,'terra');
+  ringA(B,1,1,1,'terra'); B.add('b',2,2,1,2,2,'dbrown');
+  ringB(B,1,1,4,'terra'); B.add('b',2,2,4,2,2,'dbrown');
+  ringA(B,1,1,7,'nougat'); B.add('b',2,2,7,2,2,'dbrown');
+  // afgeronde rand met gebogen schuine steentjes
+  B.add('cs',1,4,10,4,1,'terra',0).add('cs',1,1,10,4,1,'terra',2).add('cs',1,2,10,2,1,'terra',3).add('cs',4,2,10,2,1,'terra',1);
+  B.add('p',2,2,10,2,2,'dbrown');                     // potgrond
+  B.add('c',3,3,11,1,1,'green').add('c',3,3,14,1,1,'green').add('fl',3,3,17,1,1,'coral');
   B.add('cp',3,2,11,1,1,'green').add('c',3,2,12,1,1,'bgreen').add('fl',3,2,15,1,1,'yellow');
-  B.add('c',3,3,11,1,1,'green').add('fl',3,3,14,1,1,'pink');
-  B.add('p',1,3,11,2,1,'bgreen').add('p',4,1,11,1,2,'bgreen');
-  B.add('fl',0,5,11,1,1,'white').add('fl',5,0,11,1,1,'white');
+  B.add('pl',2,2,11,1,1,'green').add('pl',2,3,11,1,1,'bgreen');
   return B.raw;
 }
 
@@ -467,11 +481,11 @@ function setTree(){
   const B=Bld();
   B.add('p',0,0,0,8,8,'bgreen');
   B.add('b',3,3,1,2,2,'brown');
-  B.add('s',3,5,1,2,1,'brown',0).add('s',3,2,1,2,1,'brown',2).add('s',2,3,1,2,1,'brown',3).add('s',5,3,1,2,1,'brown',1);
-  B.add('fl',1,6,1,1,1,'yellow').add('fl',6,1,1,1,1,'white').add('fl',0,2,1,1,1,'red').add('cp',6,6,1,1,1,'red');
+  B.add('cs',3,5,1,2,1,'brown',0).add('cs',3,2,1,2,1,'brown',2).add('cs',2,3,1,2,1,'brown',3).add('cs',5,3,1,2,1,'brown',1);
+  B.add('pl',6,0,1,2,1,'bgreen').add('fl',1,6,1,1,1,'yellow').add('fl',0,2,1,1,1,'red').add('cp',6,6,1,1,1,'red');
   B.add('b',3,3,4,2,2,'brown').add('b',3,3,7,2,2,'brown').add('b',3,3,10,2,2,'brown');
   B.add('p',0,0,13,8,8,'green');
-  const A={c:'red',t:'c',one:true}, W=(dir)=>({t:'s',c:'green',dir});
+  const A={c:'red',t:'c',one:true}, W=(dir)=>({t:'cs',c:'green',dir});
   B.add('cp',0,0,14,1,1,'red').add('cp',7,7,14,1,1,'red');
   B.art(14,['.GGGGGG.','GGGGGGGG','GGGGGGGG','AGGGGGGG','GGGGGGGA','GGGGGGGG','GGGGGGGG','.GAGGGG.'],{G:'green',A});
   B.art(17,['.GGAGGG.','GGGGGGGA','GGGGGGGG','GGGGGGGG','GGGGGGGG','AGGGGGGG','GGGGGGGG','.GGGGAG.'],{G:'bgreen',A},{alt:1});
@@ -479,25 +493,11 @@ function setTree(){
     {G:'green','^':W(2),v:W(0),'<':W(3),'>':W(1)});
   B.add('cp',1,1,23,1,1,'red').add('cp',6,6,23,1,1,'red');
   B.art(23,['........','..^^^^..','.<GGGG>.','.<GGGG>.','.<GGGG>.','.<GGGG>.','..vvvv..','........'],
-    {G:'bgreen','^':{t:'s',c:'bgreen',dir:2},v:{t:'s',c:'bgreen',dir:0},'<':{t:'s',c:'bgreen',dir:3},'>':{t:'s',c:'bgreen',dir:1}});
+    {G:'bgreen','^':{t:'cs',c:'bgreen',dir:2},v:{t:'cs',c:'bgreen',dir:0},'<':{t:'cs',c:'bgreen',dir:3},'>':{t:'cs',c:'bgreen',dir:1}});
   B.add('cp',2,2,26,1,1,'red').add('cp',5,5,26,1,1,'red');
   B.art(26,['........','........','...^^...','..<GG>..','..<GG>..','...vv...','........','........'],
     {G:'green','^':W(2),v:W(0),'<':W(3),'>':W(1)});
   B.add('d',3,3,29,2,2,'bgreen');
-  return B.raw;
-}
-
-function setCar(){
-  const B=Bld();
-  B.add('b',1,1,0,2,4,'black').add('b',7,1,0,2,4,'black');
-  B.add('w',1,0,0,2,1,'lgray').add('w',1,5,0,2,1,'lgray').add('w',7,0,0,2,1,'lgray').add('w',7,5,0,2,1,'lgray');
-  B.region('p',3,rect(0,1,10,4),'black');
-  B.region('p',4,rect(0,0,10,6),'red');
-  B.art(5,['RRRRRRRRRR','LRK.S.RRRH','RRK.S.RRRG','RRK.Q.RRRG','LRK.Q.RRRH','RRRRRRRRRR'],
-    {R:'red',K:'black',S:'black',Q:'black',G:'dgray',L:{c:'tred',one:true},H:{c:'tclear',one:true}});
-  B.add('cp',5,1,5,1,1,'black');                     // stuur
-  B.art(8,['tttttttttt','ttB.C.Wttt','ttB.C.Wttt','ttB.D.Wttt','ttB.D.Wttt','tttttttttt'],
-    {t:{t:'t',c:'red'},B:{t:'s',c:'black',dir:1},C:{t:'s',c:'black',dir:1},D:{t:'s',c:'black',dir:1},W:{t:'s',c:'tclear',dir:3}});
   return B.raw;
 }
 
@@ -525,95 +525,10 @@ function setCat(){
   const W=dir=>({t:'s',c:F,dir});
   B.art(21,['..........','..........','.lr^^^^lr.','.lrTTTTlr.','.TTTTTTTT.','.TTTTTTTT.','.TTTTTTTT.','.TTTTTTTT.'],
     {l:W(3),r:W(1),'^':W(2),v:W(0),T:{t:'t',c:F}},o);
+  B.add('tr',1,2,2,1,1,'white').add('tr',10,2,2,1,1,'white').add('tr',1,9,2,1,1,'white').add('tr',10,9,2,1,1,'white');
   // naambordje en speelgoed
   B.add('e',4,12,0,4,1,'white',0,'txt:MARCEL');
   B.add('cp',13,7,0,2,2,'red').add('d',13,7,1,2,2,'red').add('p',12,10,0,1,2,'red');
-  return B.raw;
-}
-
-function setRocket(){
-  const B=Bld();
-  B.region('p',0,rect(0,0,12,10),'dgray');
-  B.add('t',0,9,1,4,1,'yellow').add('t',4,9,1,4,1,'black').add('t',8,9,1,4,1,'yellow');
-  // motoren
-  B.add('c',5,4,1,2,2,'dgray').add('c',4,3,1,1,1,'black').add('c',7,3,1,1,1,'black').add('c',4,6,1,1,1,'black').add('c',7,6,1,1,1,'black');
-  B.add('c',2,4,1,2,2,'dgray').add('c',8,4,1,2,2,'dgray');
-  // vinnen
-  B.add('b',1,4,1,1,2,'red').add('b',10,4,1,1,2,'red').add('b',5,7,1,2,1,'red').add('b',5,2,1,2,1,'red');
-  B.add('s',1,4,4,2,1,'red',3).add('s',10,4,4,2,1,'red',1).add('s',5,7,4,2,1,'red',0).add('s',5,2,4,2,1,'red',2);
-  B.add('p',4,3,4,4,4,'white');
-  // zijraketten
-  for(const y of [4,7,10,13]){B.add('c',2,4,y,2,2,y===10?'red':'white');B.add('c',8,4,y,2,2,y===10?'red':'white');}
-  B.add('d',2,4,16,2,2,'red').add('d',8,4,16,2,2,'red');
-  // romp
-  const ring=['WWWW','W..W','W..W','WWWW'], win=['WWWW','W..W','W..W','WGGW'];
-  const lay=[[5,'white',ring],[8,'white',ring],[11,'red',ring],[14,'white',win],[17,'white',ring],[20,'white',ring],[23,'red',ring],[26,'white',ring]];
-  for(const [y,c,rows] of lay)B.art(y,rows,{W:c,G:'tlblue'},{ox:4,oz:3});
-  B.add('p',4,3,29,4,4,'white');
-  const R=dir=>({t:'s',c:'red',dir});
-  B.art(30,['.^^.','<..>','<..>','.vv.'],{'^':R(2),v:R(0),'<':R(3),'>':R(1)},{ox:4,oz:3});
-  B.add('c',5,4,30,2,2,'red').add('d',5,4,33,2,2,'white');
-  // lanceertoren
-  for(const y of [1,4,7,10,13])B.add('b',10,1,y,2,2,'lgray');
-  B.add('p',7,2,16,4,1,'yellow');
-  for(const y of [17,20,23])B.add('b',10,1,y,2,2,'lgray');
-  B.add('p',10,1,26,2,2,'red').add('c',10,1,27,1,1,'tred');
-  return B.raw;
-}
-
-function setHouse(){
-  const B=Bld();
-  const X0=2,Z0=2,W=12,D=10;                    // huis x2..13, z2..11, voorkant z=11
-  B.region('p',0,rect(X0,Z0,W,D),'tan');
-  // interieur
-  B.add('t',5,4,1,2,4,'dred');                  // tapijt
-  B.add('c',9,5,1,1,1,'brown').add('cp',9,5,4,2,2,'brown');  // tafeltje
-  B.add('b',4,9,1,1,2,'brown');                 // kast
-  const holes=[[7,11,1,2,1,9],[4,11,4,2,1,6],[10,11,4,2,1,6],[X0,6,4,1,2,6],[X0+W-1,6,4,1,2,6],[5,2,4,2,1,6],[10,2,4,2,1,6]];
-  const skip=(x,z,y)=>holes.some(([hx,hz,hy,hw,hd,hh])=>x>=hx&&x<hx+hw&&z>=hz&&z<hz+hd&&y>=hy&&y<hy+hh);
-  const wc=(x,z,y)=>y<4?'dgray':'white';
-  wallLayer(B,X0,Z0,W,D,1,0,wc,skip);
-  B.add('dr',7,11,1,2,1,'dgreen');
-  wallLayer(B,X0,Z0,W,D,4,1,wc,skip);
-  B.add('v',4,11,4,2,1,'dgreen').add('v',10,11,4,2,1,'dgreen').add('v',X0,6,4,1,2,'dgreen').add('v',X0+W-1,6,4,1,2,'dgreen');
-  B.add('v',5,2,4,2,1,'dgreen').add('v',10,2,4,2,1,'dgreen');
-  wallLayer(B,X0,Z0,W,D,7,2,wc,skip);
-  wallLayer(B,X0,Z0,W,D,10,3,wc,skip);
-  // dak
-  B.region('p',13,rect(1,1,14,12),'dgray');
-  const chim=(x,z)=>x>=10&&x<=11&&z>=5&&z<=6;
-  for(let r=0;r<5;r++){
-    const y=14+3*r;
-    // voorkant (helling naar +z): noppenrij z=11-r, helling z=12-r
-    for(const [x,w] of [[1,4],[5,4],[9,4],[13,2]])B.add('s',x,11-r,y,w,2,'red',0);
-    // achterkant (helling naar -z): helling z=1+r, noppenrij z=2+r
-    for(const [x,w] of [[1,4],[5,4],[9,4],[13,2]]){
-      if(x===9){ // schoorsteen x10..11
-        const segs=[[9,1],[12,1]];
-        const sz=1+r,nz=2+r;
-        if(!chim(10,sz)&&!chim(10,nz)){B.add('s',9,sz,y,4,2,'red',2);continue;}
-        for(const [sx,sw] of segs)B.add('s',sx,sz,y,sw,2,'red',2);
-        if(!chim(10,sz)&&chim(10,nz))B.add('s',10,sz,y,2,1,'red',2);
-        else if(chim(10,sz)&&!chim(10,nz))B.add('b',10,nz,y,2,1,'red');
-      }else B.add('s',x,1+r,y,w,2,'red',2);
-    }
-    if(r<4){ // puntgevels
-      const za=3+r,zb=10-r;
-      if(zb>=za){B.add('b',X0,za,y,1,zb-za+1,'white');B.add('b',X0+W-1,za,y,1,zb-za+1,'white');}
-    }
-    B.add('b',10,5,y,2,2,'dred');
-  }
-  B.add('b',10,5,29,2,2,'dred').add('p',10,5,32,2,2,'dgray');
-  for(const [x,w] of [[1,4],[5,4],[13,2]])B.add('t',x,6,29,w,2,'dred');
-  B.add('t',9,6,29,1,2,'dred').add('t',12,6,29,1,2,'dred').add('t',10,7,29,2,1,'dred');
-  // tuin
-  B.add('t',7,12,0,2,2,'lgray').add('t',7,14,0,2,2,'lgray');
-  for(const [x,c] of [[3,'red'],[4,'yellow'],[5,'pink'],[10,'white'],[11,'red'],[12,'yellow']])B.add('fl',x,12,0,1,1,c);
-  B.add('bu',1,12,0,2,2,'green').add('bu',13,12,0,2,2,'bgreen');
-  for(const x of [0,3,10,13])B.add('c',x,15,0,1,1,'white');
-  B.add('p',0,15,3,4,1,'white').add('p',10,15,3,4,1,'white');
-  B.add('c',12,13,0,1,1,'dgray').add('b',12,13,3,1,2,'red');     // brievenbus
-  B.add('c',16,4,0,1,1,'brown').add('c',16,4,3,1,1,'brown').add('bu',16,4,6,2,2,'green');   // boompje
   return B.raw;
 }
 
@@ -630,7 +545,7 @@ function setLight(){
   const low=rock(6.2,1).filter(c=>!hi.has(c.join(','))&&!(c[0]>=11&&c[1]>=11));
   low.sort((a,b)=>hash(a[0],a[1],3)-hash(b[0],b[1],3));
   low.slice(0,3).forEach(([x,z],i)=>B.add('fl',x,z,4,1,1,['white','yellow','white'][i]));
-  low.slice(3,5).forEach(([x,z])=>B.add('bu',x,z,4,1,1,'green'));
+  low.slice(3,5).forEach(([x,z])=>B.add('pl',x,z,4,1,1,'green'));
   // vuurtoren
   const lay=(k)=>{const red=Math.floor(k/2)%2===0;return red?'red':'white';};
   for(let k=0;k<10;k++){
@@ -653,6 +568,7 @@ function setLight(){
   B.art(45,['.^^^^.','<CCCC>','<CCCC>','<CCCC>','<CCCC>','.vvvv.'],{'^':R(2),v:R(0),'<':R(3),'>':R(1),C:'red'},{ox:5,oz:5});
   B.art(48,['.^^.','<CC>','<CC>','.vv.'],{'^':R(2),v:R(0),'<':R(3),'>':R(1),C:'red'},{ox:6,oz:6});
   B.add('d',7,7,51,2,2,'red');
+  for(const [x,z] of [[0,0],[14,0],[0,14],[14,6]])B.add('pt',x,z,1,2,2,'blue',0,'water');
   // bootje
   B.add('p',12,13,1,2,3,'white').add('s',12,15,2,2,1,'white',0).add('b',12,13,2,2,1,'red').add('cp',13,14,2,1,1,'yellow');
   return B.raw;
@@ -686,8 +602,8 @@ function setXmas(){
     for(const dir of [2,0,3,1]){
       const horiz=dir===0||dir===2,fixed=dir===2?o:dir===0?o+n-1:dir===3?o:o+n-1;
       let i=1;
-      while(i<n-1){const rem=n-1-i,L=rem>=6?4:rem===5?3:rem>4?4:rem;
-        if(horiz)B.add('s',o+i,fixed,y,L,1,'green',dir);else B.add('s',fixed,o+i,y,L,1,'green',dir);i+=L;}
+      while(i<n-1){const rem=n-1-i,L=rem>=6?4:rem===5?3:rem;
+        if(horiz)B.add('cs',o+i,fixed,y,L,1,'green',dir);else B.add('cs',fixed,o+i,y,L,1,'green',dir);i+=L;}
     }
     B.region('b',y,rect(o+1,o+1,n-2,n-2),'green');
     y+=3;ti++;
@@ -696,161 +612,285 @@ function setXmas(){
   return B.raw;
 }
 
-function setCafe(){
-  const B=Bld();
-  const X0=0,Z0=0,W=14,D=10;
-  B.region('p',0,rect(0,0,14,10),'lgray');
-  // toog en interieur
-  B.add('b',2,1,1,4,1,'brown').add('b',2,1,4,4,1,'brown');            // rek achteraan
-  for(const x of [2,3,4,5])B.add('cp',x,1,7,1,1,x%2?'white':'lblue');
-  B.add('b',2,3,1,8,1,'dred').add('p',2,3,4,8,1,'tan');                // toog
-  B.add('b',3,3,5,2,1,'silver').add('b',5,3,5,1,1,'black').add('c',7,3,5,1,1,'white').add('cp',8,3,5,1,1,'pink').add('b',9,3,5,1,1,'tclear');
-  // dambordvloer
-  for(let bz=0;bz<2;bz++)for(let bx=0;bx<6;bx++){
-    const x=1+bx*2,z=5+bz*2;
-    if((bx===1||bx===4)&&bz===0)continue;
-    B.add('t',x,z,1,2,2,(bx+bz)%2?'black':'white');
-  }
-  B.add('c',3,5,1,1,1,'black').add('cp',3,5,4,2,2,'white').add('c',9,5,1,1,1,'black').add('cp',9,5,4,2,2,'white');
-  // gelijkvloers
-  const holes=[[6,9,1,2,1,9],[1,9,4,4,1,6],[9,9,4,4,1,6],[0,3,4,1,2,6],[0,6,4,1,2,6],[13,3,4,1,2,6],[13,6,4,1,2,6],[9,0,4,2,1,6],
-    [0,9,10,14,1,3]];
+function setUp(){
+  const B=Bld(),W=12,D=10;
+  B.region('p',0,rect(-3,-2,18,17),'bgreen');
+  // fundering van metselsteen
+  wallLayer(B,0,0,W,D,1,0,'dtan',null,'m');
+  const holes=[[2,9,4,2,1,9],[6,9,6,2,1,6],[9,9,6,2,1,6],[0,3,6,1,2,6],[0,6,6,1,2,6],[11,6,6,1,2,6],[4,0,6,2,1,6],[8,0,6,2,1,6]];
   const skip=(x,z,y)=>holes.some(([hx,hz,hy,hw,hd,hh])=>x>=hx&&x<hx+hw&&z>=hz&&z<hz+hd&&y>=hy&&y<hy+hh);
-  const gc=(x,z,y)=>y<4?'dgray':'sgreen';
-  wallLayer(B,X0,Z0,W,D,1,0,gc,skip);
-  B.add('dr',6,9,1,2,1,'dgreen');
-  wallLayer(B,X0,Z0,W,D,4,1,gc,skip);
-  for(const x of [1,3,9,11])B.add('v',x,9,4,2,1,'white');
-  for(const z of [3,6]){B.add('v',0,z,4,1,2,'white');B.add('v',13,z,4,1,2,'white');}
-  B.add('v',9,0,4,2,1,'white');
-  wallLayer(B,X0,Z0,W,D,7,2,gc,skip);
-  // luifel: gestreepte schuine stenen
-  for(let x=0;x<14;x++)B.add('s',x,9,10,1,2,x%2?'white':'red',0);
-  wallLayer(B,X0,Z0,W,D,10,3,'sgreen',skip);
-  // verdiepingsvloer
-  B.region('p',13,rect(0,0,14,10),'white');
-  // bovenverdieping
-  const holes2=[[4,9,14,6,1,3],[2,9,17,2,1,6],[6,9,17,2,1,6],[10,9,17,2,1,6],[0,4,17,1,2,6],[13,4,17,1,2,6],[5,0,17,4,1,6]];
-  const skip2=(x,z,y)=>holes2.some(([hx,hz,hy,hw,hd,hh])=>x>=hx&&x<hx+hw&&z>=hz&&z<hz+hd&&y>=hy&&y<hy+hh);
-  wallLayer(B,X0,Z0,W,D,14,0,'tan',skip2);
-  B.add('e',4,9,14,6,1,'dgreen',0,'txt:KOFFIE');
-  wallLayer(B,X0,Z0,W,D,17,1,'tan',skip2);
-  for(const x of [2,6,10])B.add('v',x,9,17,2,1,'dgreen');
-  B.add('v',0,4,17,1,2,'dgreen').add('v',13,4,17,1,2,'dgreen').add('v',5,0,17,2,1,'dgreen').add('v',7,0,17,2,1,'dgreen');
-  wallLayer(B,X0,Z0,W,D,20,2,'tan',skip2);
-  wallLayer(B,X0,Z0,W,D,23,3,'tan',skip2);
-  // dak
-  B.region('p',26,rect(0,0,14,10),'dgray');
-  wallLayer(B,X0,Z0,W,D,27,0,'white');
-  B.add('b',3,3,27,2,2,'lgray').add('t',3,3,30,2,2,'dgray');          // airco
-  B.add('c',9,2,27,1,1,'silver').add('c',9,2,30,1,1,'silver');
-  B.add('bu',8,5,27,2,2,'bgreen').add('bu',4,6,27,2,2,'green');
-  // terras
-  B.region('p',0,rect(0,10,14,5),'lgray');
-  B.add('c',2,12,1,1,1,'black').add('cp',2,12,4,2,2,'white');
-  B.add('b',1,12,1,1,1,'dazure').add('b',4,13,1,1,1,'dazure');
-  B.add('c',7,12,1,1,1,'black').add('cp',7,12,4,2,2,'white');
-  B.add('b',6,13,1,1,1,'dazure').add('b',9,12,1,1,1,'dazure');
-  // parasol
-  B.add('c',12,12,1,1,1,'white').add('c',12,12,4,1,1,'white').add('c',12,12,7,1,1,'white');
-  B.add('p',10,11,10,4,4,'red');
-  B.art(11,['.^^.','<CC>','<CC>','.vv.'],{'^':{t:'s',c:'red',dir:2},v:{t:'s',c:'red',dir:0},'<':{t:'s',c:'red',dir:3},'>':{t:'s',c:'red',dir:1},C:'white'},{ox:10,oz:11});
-  B.add('cp',11,12,14,2,2,'white');
-  B.add('b',0,10,1,2,2,'brown').add('bu',0,10,4,2,2,'green');
-  B.add('b',12,14,1,2,1,'brown').add('fl',12,14,4,1,1,'red').add('fl',13,14,4,1,1,'yellow');
+  const face=(x,z)=>z===D-1?'lblue':z===0?'pink':x===0?'lyellow':'sgreen';
+  // gevelplanken: gestapelde plaatjes, elke gevel een andere pastelkleur
+  for(let k=0;k<9;k++){
+    const y=4+k;
+    wallLayer(B,0,0,W,D,y,k,(x,z)=>face(x,z),skip,'p');
+    if(k===0)B.add('dr',2,9,4,2,1,'teal');
+    if(k===2){B.add('v',6,9,6,2,1,'white').add('v',9,9,6,2,1,'white').add('v',0,3,6,1,2,'white').add('v',0,6,6,1,2,'white')
+      .add('v',11,6,6,1,2,'white').add('v',4,0,6,2,1,'white').add('v',8,0,6,2,1,'white');}
+  }
+  // veranda met witte zuiltjes
+  B.add('b',-1,10,1,1,1,'dtan').add('b',6,11,1,1,1,'dtan').add('b',-1,11,1,1,1,'dtan').add('b',6,10,1,1,1,'dtan');
+  B.add('p',-1,10,4,8,2,'white');
+  B.add('t',0,10,5,6,1,'mnougat').add('t',0,11,5,6,1,'mnougat').add('t',-1,10,5,1,1,'mnougat').add('t',6,10,5,1,1,'mnougat');
+  for(const y of [5,8])B.add('c',-1,11,y,1,1,'white').add('c',6,11,y,1,1,'white');
+  B.add('p',-1,10,11,8,2,'white');
+  B.add('t',-1,10,12,4,2,'sblue').add('t',3,10,12,4,2,'sblue');
+  B.add('b',1,12,1,2,1,'lgray').add('g',1,12,4,2,1,'lgray');
+  // dak (nok van voor naar achter, puntgevel naar voren)
+  B.region('p',13,rect(-1,-1,13,12),'dgray');
+  for(let r=0;r<6;r++){
+    const y=14+3*r;
+    for(const z of [-1,3,7])B.add('s',-1+r,z,y,4,2,'slate',3);
+    if(r===0){B.add('s',11,-1,y,4,2,'slate',1).add('s',11,3,y,1,2,'slate',1).add('s',11,4,y,2,1,'slate',1).add('s',11,6,y,1,2,'slate',1).add('s',11,7,y,4,2,'slate',1);}
+    else for(const z of [-1,3,7])B.add('s',11-r,z,y,4,2,'slate',1);
+    if(r<5){
+      const a=r+1,b2=10-r;
+      for(const [z,c] of [[9,'pink'],[0,'lyellow']]){
+        const segs=z===9&&r<2?[[a,4],[7,b2]]:[[a,b2]];
+        for(const [s0,s1] of segs){let x=s0;for(const L of splitRun(s1-s0+1,r))B.add('b',x,z,y,L,1,c),x+=L;}
+      }
+      if(r===0)B.add('v',5,9,14,2,1,'white');
+    }
+  }
+  B.add('t',5,-1,32,2,4,'dgray').add('t',5,3,32,2,4,'dgray').add('t',5,7,32,2,4,'dgray');
+  // schoorsteen van metselsteen
+  for(let k=0;k<12;k++){const y=1+3*k;
+    if(k%2===0)B.add('m',12,4,y,2,1,'dred').add('m',12,5,y,2,1,'dred');else B.add('m',12,4,y,1,2,'dred').add('m',13,4,y,1,2,'dred');}
+  B.add('p',12,4,37,2,2,'dgray');
+  B.add('c',12,4,38,1,1,'tclear');
+  B.add('p',9,1,41,8,8,'tclear');
+  // de ballonnen
+  const bc=['red','yellow','dazure','lime','orange','pink','mlav','coral','azure','bgreen','tyellow','lyellow','dpink','blue'];
+  let n=0;
+  for(let z=1;z<9;z++)for(let x=9;x<17;x++){if(hash(x,z,9)<0.18||((x===9||x===16)&&(z===1||z===8)))continue;B.add('bl',x,z,42,1,1,bc[(x*7+z*3+n)%bc.length],0,String(n%10));n++;}
+  // tuin
+  B.add('t',1,13,1,2,2,'tan').add('tq',0,14,1,1,1,'tan',1).add('tq',3,14,1,1,1,'tan',2);
+  B.add('pl',-3,10,1,2,2,'green').add('pl',7,10,1,1,1,'bgreen').add('pl',13,12,1,2,2,'green');
+  for(const [x,z,c] of [[8,11,'red'],[9,11,'yellow'],[10,11,'pink'],[-2,13,'white'],[-3,12,'yellow']])B.add('fl',x,z,1,1,1,c);
+  B.add('bu',-3,0,1,2,2,'bgreen').add('bu',13,-2,1,2,2,'green');
+  // brievenbus van Carl
+  B.add('c',9,13,1,1,1,'brown').add('c',9,13,4,1,1,'brown').add('b',9,13,7,1,2,'white').add('cs',9,13,10,1,2,'white',0);
   return B.raw;
 }
 
-function setCastle(){
+function setDelorean(){
   const B=Bld();
-  const N=24;
-  B.region('p',0,rect(0,0,N,N),'tan');
-  // ophaalbrug
-  B.add('t',10,24,0,2,2,'brown').add('t',12,24,0,2,2,'brown').add('t',10,26,0,4,1,'brown');
-  const gskip=(x,z,y)=>(y<7&&x>=10&&x<=13)||(y>=7&&y<13&&x>=9&&x<=14);
-  // voormuur met poort
-  for(let k=0;k<5;k++){
+  // vuursporen op de weg
+  for(const z of [0,5]){B.add('t',-12,z,0,6,1,'tyellow').add('t',-6,z,0,4,1,'torange').add('tr',-2,z,0,1,1,'torange');}
+  B.add('b',2,1,0,2,4,'black').add('b',10,1,0,2,4,'black');
+  for(const x of [2,10])B.add('w',x,0,0,2,1,'silver').add('w',x,5,0,2,1,'silver');
+  B.region('p',3,rect(0,1,14,4),'black');
+  B.region('p',4,rect(0,0,14,6),'black');
+  B.art(5,['TRRRRRRRRRRRRR','RRRRR.SS..RRRH','.RRRR.SS..RRRG','.RRRR.QQ..RRRG','RRRRR.QQ..RRRH','TRRRRRRRRRRRRR'],
+    {R:'lgray',S:'black',Q:'black',G:'dgray',T:{c:'tred',one:true},H:{c:'tclear',one:true}});
+  B.add('e',0,2,5,1,2,'black',3,'kenteken');
+  B.add('e',5,2,5,1,2,'dgray',1,'flux');
+  B.art(8,['TTTTTPWWWWTTTC','TFGGGrB...wTTC','TGGGGrB...wTTC','TGGGGrD...wTTC','TGGGGrD...wTTC','TTTTTPWWWWTTTC'],
+    {T:{t:'t',c:'lgray'},P:{c:'tsmoke',one:true},W:'tsmoke',F:{t:'c',c:'white',one:true},G:{t:'g',c:'black'},
+     r:{t:'s',c:'black',dir:3},B:{t:'s',c:'black',dir:3},D:{t:'s',c:'black',dir:3},w:{t:'s',c:'tsmoke',dir:1},C:{t:'cs',c:'lgray',dir:1}});
+  B.add('tr',1,1,11,1,1,'dgray');
+  // afgerond dak
+  B.add('p',6,0,11,4,6,'lgray');
+  B.add('cs',6,0,12,4,1,'lgray',2).add('cs',6,5,12,4,1,'lgray',0).add('t',6,1,12,4,2,'lgray').add('t',6,3,12,4,2,'lgray');
+  return B.raw;
+}
+
+function setFriends(){
+  const B=Bld(),Wd=16,Dp=12;
+  B.region('p',0,rect(0,0,Wd,Dp),'dtan');
+  // meubels die op noppen staan
+  const used=new Set();const mark=(x,z,w,d)=>{for(let i=0;i<w;i++)for(let j=0;j<d;j++)used.add((x+i)+','+(z+j));};
+  // de oranje bank
+  B.add('b',5,3,1,6,2,'orange').add('b',4,3,1,1,2,'orange').add('b',11,3,1,1,2,'orange');mark(4,3,8,2);
+  B.add('b',5,3,4,6,1,'orange');
+  B.add('t',5,4,4,3,1,'orange').add('t',8,4,4,3,1,'orange');
+  B.add('cs',5,3,7,3,1,'orange',2).add('cs',8,3,7,3,1,'orange',2);
+  B.add('cs',4,3,4,2,1,'orange',1).add('cs',11,3,4,2,1,'orange',3);
+  // salontafel met koffietassen
+  B.add('c',6,6,1,1,1,'dbrown').add('c',9,7,1,1,1,'dbrown');mark(6,6,4,2);
+  B.add('p',6,6,4,4,2,'brown');
+  B.add('c',6,6,5,1,1,'white').add('c',7,7,5,1,1,'coral').add('t',8,6,5,2,2,'brown');
+  B.add('pt',6,6,8,1,1,'white',0,'koffie').add('pt',7,7,8,1,1,'coral',0,'koffie');
+  // fauteuils
+  B.add('b',1,6,1,2,2,'olive').add('s',1,6,4,2,1,'olive',2).add('t',1,7,4,2,1,'olive');mark(1,6,2,2);
+  B.add('b',13,6,1,2,2,'dred').add('cs',13,6,4,2,1,'dred',2).add('t',13,7,4,2,1,'dred');mark(13,6,2,2);
+  B.add('lp',3,3,1,1,1,'gold');mark(3,3,1,1);
+  // toog met espressomachine
+  B.add('b',12,1,1,4,1,'dbrown').add('b',12,1,4,4,1,'dbrown');mark(12,1,4,1);
+  B.add('b',12,2,1,4,1,'mnougat').add('p',12,2,4,4,1,'tan');mark(12,2,4,1);
+  B.add('b',12,1,7,2,1,'silver').add('c',14,1,7,1,1,'black').add('tr',12,1,10,1,1,'black').add('pt',13,1,10,1,1,'silver',0,'koffie');
+  B.add('b',13,2,5,2,1,'tclear').add('c',12,2,5,1,1,'white').add('b',15,2,5,1,1,'dgray');
+  // planten in potjes
+  B.add('c',1,1,1,1,1,'terra').add('pl',1,1,4,1,1,'green');mark(1,1,1,1);
+  B.add('c',14,10,1,2,2,'terra').add('pl',14,10,4,2,2,'bgreen');mark(14,10,2,2);
+  // houten plankenvloer
+  const cells=rect(1,1,15,11).filter(([x,z])=>!used.has(x+','+z));
+  const rows=new Map();cells.forEach(([x,z])=>{if(!rows.has(z))rows.set(z,[]);rows.get(z).push(x);});
+  for(const [z,xs] of rows){xs.sort((a,b)=>a-b);let i=0,k=z;
+    while(i<xs.length){let j=i;while(j+1<xs.length&&xs[j+1]===xs[j]+1)j++;
+      let x=xs[i];for(const L of splitRun(j-i+1,k))B.add('t',x,z,1,L,1,(x+z)%3?'mnougat':'nougat'),x+=L;i=j+1;}}
+  // bakstenen muren (achter en links)
+  const holes=[[4,0,4,6,1,6],[4,0,10,6,1,6],[0,7,1,1,3,9],[0,3,4,1,2,6],[11,0,13,2,1,3],[0,9,13,1,2,3]];
+  const skip=(x,z,y)=>holes.some(([hx,hz,hy,hw,hd,hh])=>x>=hx&&x<hx+hw&&z>=hz&&z<hz+hd&&y>=hy&&y<hy+hh);
+  for(let k=0;k<6;k++){
     const y=1+3*k;
-    wall2(B,6,22,12,true,y,k,stone,gskip);
-    if(k===2){B.add('a',9,22,7,6,1,'lgray');B.add('a',9,23,7,6,1,'lgray');}
+    const back=[],left=[];
+    for(let x=(k%2?1:0);x<Wd;x++)if(!skip(x,0,y))back.push(x);
+    for(let z=(k%2?0:1);z<Dp;z++)if(!skip(0,z,y))left.push(z);
+    const run=(arr,f)=>{let i=0;while(i<arr.length){let j=i;while(j+1<arr.length&&arr[j+1]===arr[j]+1)j++;let a=arr[i];for(const L of splitRun(j-i+1,k)){f(a,L);a+=L;}i=j+1;}};
+    run(back,(x,L)=>B.add('m',x,0,y,L,1,'terra'));
+    run(left,(z,L)=>B.add('m',0,z,y,1,L,'terra'));
+    if(k===1){B.add('v',4,0,4,2,1,'dgreen').add('v',6,0,4,2,1,'dgreen').add('v',8,0,4,2,1,'dgreen').add('v',0,3,4,1,2,'dgreen');}
+    if(k===0)B.add('dr',0,7,1,1,3,'dgreen');
+    if(k===3)B.add('a',4,0,10,6,1,'dgreen');
+    if(k===4){B.add('e',11,0,13,2,1,'white',0,'schilderij');B.add('e',0,9,13,1,2,'dgray',1,'menu');}
   }
-  for(let x=6;x<=16;x+=2)B.add('b',x,23,16,1,1,stone(x,23,16));
-  // torens
-  const tower=(ox,oz,top)=>{
-    for(let k=0;k<7;k++){
-      const y=1+3*k;
-      B.art(y,OCT6,{X:stone},{ox,oz,alt:k%2});
+  B.add('e',4,0,19,8,1,'dgreen',0,'txt:CENTRAL PERK');
+  B.region('t',19,rect(0,0,4,1).concat(rect(12,0,4,1),rect(0,1,1,Dp-1)),'dtan');
+  return B.raw;
+}
+
+function bruggeHouse(B,x0,W,D,lv,c,opts){
+  const t=opts.mason?'m':'b',z1=D-1,holes=[];
+  holes.push([x0+1,z1,1,2,1,9]);                                   // deur
+  if(W>=6)holes.push([x0+W-3,z1,4,2,1,6]);                         // etalage
+  for(let l=1;l<lv;l++){const y=1+l*9+3;
+    if(W>=6){holes.push([x0+1,z1,y,2,1,6]);holes.push([x0+W-3,z1,y,2,1,6]);}else holes.push([x0+((W-2)>>1),z1,y,2,1,6]);}
+  const inHole=(x,z,y)=>holes.some(([hx,hz,hy,hw,hd,hh])=>x>=hx&&x<hx+hw&&z>=hz&&z<hz+hd&&y>=hy&&y<hy+hh);
+  const luiken=[];
+  if(opts.luik)for(const [hx,hz,hy,hw,hd,hh] of holes)if(hh===6&&hy>4)for(const lx of [hx-1,hx+2])
+    if(lx>x0&&lx<x0+W-1&&!inHole(lx,z1,hy)&&!inHole(lx,z1,hy+3)&&!luiken.some(q=>q[0]===lx&&q[1]===hy))luiken.push([lx,hy]);
+  const skip=(x,z,y)=>inHole(x,z,y)||luiken.some(([lx,ly])=>x===lx&&z===z1&&y>=ly&&y<ly+6);
+  const nl=lv*3;
+  for(let k=0;k<nl;k++){
+    const y=1+3*k;
+    wallLayer(B,x0,0,W,D,y,k,c,skip,t);
+    for(const [hx,hz,hy,hw,hd,hh] of holes)if(hy===y){
+      if(hh===9)B.add('dr',hx,hz,hy,hw,hd,opts.door||'dgreen');else B.add('v',hx,hz,hy,hw,hd,'white');}
+    for(const [lx,ly] of luiken)if(ly===y||ly+3===y)B.add('e',lx,z1,y,1,1,opts.luik,0,'luik');
+  }
+  return {top:1+3*nl};
+}
+function setBrugge(){
+  const B=Bld();
+  // straat en kaai
+  B.region('p',0,rect(0,0,20,10),'lgray');
+  // water
+  B.region('p',0,rect(0,10,20,6),'dazure');
+  const houses=[{x:0,W:6,c:'dred',mason:true,luik:null,door:'dgreen',lv:2},{x:6,W:5,c:'lnougat',luik:'dgreen',door:'dred',lv:2},{x:11,W:7,c:'white',luik:'dblue',door:'dblue',lv:2},{x:18,W:2,c:'sgreen',lv:1}];
+  const D=7;
+  // gevels met trapgevel
+  for(const h of houses.slice(0,3)){
+    const r=bruggeHouse(B,h.x,h.W,D,h.lv,h.c,h);
+    let y=r.top;
+    B.region('p',y,rect(h.x,0,h.W,D),'dgray');y++;
+    // dakschilden achter de trapgevel, en de trapgevel zelf
+    let a=h.x,b=h.x+h.W-1,step=0;
+    const gs=h.mason?'m':'b';
+    const gable=(a,b,y,k)=>{let x=a;for(const len of splitRun(b-a+1,k))B.add(gs,x,D-1,y,len,1,h.c),x+=len;};
+    while(b-a+1>=4){
+      for(let z=0;z<D-1;z+=3){const w=Math.min(3,D-1-z);B.add('s',a,z,y,w,2,'slate',3).add('s',b-1,z,y,w,2,'slate',1);}
+      gable(a,b,y,step);B.add('t',a,D-1,y+3,1,1,'lgray').add('t',b,D-1,y+3,1,1,'lgray');
+      a++;b--;y+=3;step++;
     }
-    B.add('p',ox-1,oz-1,22,8,8,'dgray');
-    if(top==='kanteel'){
-      const per=[];
-      for(let i=0;i<8;i++)for(let j=0;j<8;j++){if((i===0||i===7||j===0||j===7)&&(i+j)%2===0&&!((i===0||i===7)&&(j===0||j===7)))per.push([ox-1+i,oz-1+j]);}
-      per.forEach(([x,z])=>B.add('b',x,z,23,1,1,stone(x,z,23)));
-      return per;
+    for(let z=0;z<D-1;z+=3){const w=Math.min(3,D-1-z);if(b-a===2)B.add('s',a,z,y,w,2,'slate',3).add('s',b,z,y,w,1,'slate',1);else B.add('s',a,z,y,w,1,'slate',3).add('s',b,z,y,w,1,'slate',1);}
+    gable(a,b,y,step);
+    if(b-a===2){B.add('t',a,D-1,y+3,1,1,'lgray').add('t',b,D-1,y+3,1,1,'lgray').add(gs,a+1,D-1,y+3,1,1,h.c).add('k',a+1,D-1,y+6,1,1,'lgray');}
+    else B.add('t',a,D-1,y+3,2,1,'lgray');
+  }
+  // kasseien en kaairand
+  const cob=rect(0,7,20,2);
+  const deco=new Set(['5,8','15,8','2,8','3,8','12,8']);
+  for(const [x,z] of cob)if(hash(x,z,1)<0.55&&!deco.has(x+','+z))B.add('tr',x,z,1,1,1,hash(x,z,2)<0.5?'dgray':'lgray');
+  for(let x=0;x<20;x+=4)B.add('m',x,9,1,4,1,'lgray');
+  B.add('t',0,9,4,4,1,'dgray').add('t',4,9,4,4,1,'dgray').add('t',8,9,4,4,1,'dgray').add('t',12,9,4,4,1,'dgray').add('t',16,9,4,4,1,'dgray');
+  B.add('lp',5,8,1,1,1,'black').add('lp',15,8,1,1,1,'black');
+  B.add('pl',2,8,1,1,1,'green').add('fl',3,8,1,1,1,'red').add('fl',12,8,1,1,1,'yellow');
+  // water met golfjes
+  for(const [x,z] of [[2,11],[8,13],[15,12],[17,10],[17,14],[4,14]])B.add('pt',x,z,1,2,2,'dazure',0,'water');
+  // rondvaartbootje
+  B.add('p',7,11,1,6,2,'brown').add('cs',13,11,1,2,1,'brown',1).add('cs',5,11,1,2,1,'brown',3);
+  B.add('b',8,11,2,1,2,'white').add('b',10,11,2,1,2,'white').add('t',9,11,2,1,2,'dbrown').add('t',11,11,2,1,2,'dbrown');
+  B.add('fg',12,11,2,1,1,'yellow');
+  return B.raw;
+}
+
+function setSchool(){
+  const B=Bld();
+  const stone2=(x,z,y)=>{const h=hash(x,z,y);return h<0.22?'dtan':h<0.32?'dgray':'lgray';};
+  const rockc=(x,z,y)=>hash(x,z,y+5)<0.4?'dgray':'lgray';
+  // het meer en de rotsen
+  B.region('p',0,rect(0,16,26,6),'dblue');
+  B.region('p',0,rect(0,0,26,16),'dgray');
+  const cliff=(r0,y)=>rect(0,0,26,16).filter(([x,z])=>{if(x>=10&&x<=15&&z<=4)return true;const e=Math.min(x,25-x,z,15-z);return e+hash(x,z,y)*1.6>r0;});
+  B.region('b',1,cliff(0.6,1),rockc);
+  B.region('b',4,cliff(1.4,4),rockc,{alt:1});
+  B.region('b',7,cliff(2.1,7),rockc);
+  // de grote zaal
+  const X0=7,Z0=5,W=12,D=6,Y=10;
+  const holes=[];for(const x of [8,11,14])holes.push([x,Z0+D-1,13,2,1,12]);for(const x of [9,13])holes.push([x,Z0,13,2,1,6]);
+  const skip=(x,z,y)=>holes.some(([hx,hz,hy,hw,hd,hh])=>x>=hx&&x<hx+hw&&z>=hz&&z<hz+hd&&y>=hy&&y<hy+hh);
+  for(let k=0;k<5;k++){const y=Y+3*k;wallLayer(B,X0,Z0,W,D,y,k,stone2,skip,'m');
+    if(k===1){for(const x of [8,11,14])B.add('v',x,Z0+D-1,13,2,1,'dgray',0,'licht');for(const x of [9,13])B.add('v',x,Z0,13,2,1,'dgray',0,'licht');}
+    if(k===3)for(const x of [8,11,14])B.add('v',x,Z0+D-1,19,2,1,'dgray',0,'licht');}
+  B.region('p',25,rect(X0-1,Z0-1,W+2,D+2),'dgray');
+  for(let r=0;r<3;r++){const y=26+3*r;
+    for(const [x,w] of [[X0-1,4],[X0+3,4],[X0+7,4],[X0+11,2]]){B.add('s',x,Z0+D-1-r,y,w,2,'slate',0).add('s',x,Z0-1+r,y,w,2,'slate',2);}
+  }
+  // puntgevels met een wapenschild
+  for(const [x,dir] of [[X0,3],[X0+W-1,1]]){
+    B.add('m',x,Z0+1,26,1,1,stone2(x,6,26)).add('e',x,Z0+2,26,1,2,'lgray',dir,'wapen').add('m',x,Z0+4,26,1,1,stone2(x,9,26));
+    B.add('m',x,Z0+2,29,1,2,stone2(x,7,29));
+  }
+  B.add('t',X0-1,Z0+2,35,4,2,'dgray').add('t',X0+3,Z0+2,35,4,2,'dgray').add('t',X0+7,Z0+2,35,4,2,'dgray').add('t',X0+11,Z0+2,35,2,2,'dgray');
+  // toren met klok (links)
+  const tower=(x,z,n,clock)=>{
+    for(let k=0;k<n;k++){const y=Y+3*k,win=k%3===2,ck=clock&&k===n-2;
+      B.art(y,['XXXX','X..X','X..X',ck?'X..X':win?'XGGX':'XXXX'],{X:{t:'m',c:stone2},G:{c:'tyellow'}},{ox:x,oz:z,alt:k%2});
+      if(ck)B.add('e',x+1,z+3,y,2,1,'lgray',0,'klok');
     }
-    const R=dir=>({t:'s',c:'dblue',dir}), L={'^':R(2),v:R(0),'<':R(3),'>':R(1),C:'dblue'};
-    B.art(23,['.^^^^^^.','<CCCCCC>','<CCCCCC>','<CCCCCC>','<CCCCCC>','<CCCCCC>','<CCCCCC>','.vvvvvv.'],L,{ox:ox-1,oz:oz-1});
-    B.art(26,['.^^^^.','<CCCC>','<CCCC>','<CCCC>','<CCCC>','.vvvv.'],L,{ox,oz});
-    B.art(29,['.^^.','<CC>','<CC>','.vv.'],L,{ox:ox+1,oz:oz+1});
-    B.add('c',ox+2,oz+2,32,2,2,'dblue').add('k',ox+2,oz+2,35,1,1,'dblue').add('fg',ox+2,oz+2,38,1,1,'red');
-    return [];
+    const top=Y+3*n,S=dir=>({t:'s',c:'slate',dir});
+    B.add('p',x-1,z-1,top,6,6,'dgray');
+    B.art(top+1,['.^^^^.','<CCCC>','<CCCC>','<CCCC>','<CCCC>','.vvvv.'],{'^':S(2),v:S(0),'<':S(3),'>':S(1),C:'slate'},{ox:x-1,oz:z-1});
+    B.art(top+4,['.^^.','<CC>','<CC>','.vv.'],{'^':S(2),v:S(0),'<':S(3),'>':S(1),C:'slate'},{ox:x,oz:z});
+    B.add('c',x+1,z+1,top+7,2,2,'slate').add('c',x+1,z+1,top+10,2,2,'slate').add('c',x+1,z+1,top+13,2,2,'dgray').add('k',x+1,z+1,top+16,2,2,'slate');
   };
-  const m1=tower(0,18,'kanteel');
-  const m2=tower(18,18,'kanteel');
-  B.add('fg',m1[m1.length-1][0],m1[m1.length-1][1],26,1,1,'yellow');
-  B.add('fg',m2[m2.length-1][0],m2[m2.length-1][1],26,1,1,'yellow');
-  // zijmuren
-  for(let k=0;k<5;k++){const y=1+3*k;wall2(B,0,6,12,false,y,k,stone);wall2(B,22,6,12,false,y,k,stone);}
-  for(let z=6;z<=16;z+=2){B.add('b',0,z,16,1,1,stone(0,z,16));B.add('b',23,z,16,1,1,stone(23,z,16));}
-  // achtertorens met spitse daken
-  tower(0,0,'spits');
-  tower(18,0,'spits');
-  // achtermuur
-  for(let k=0;k<5;k++){const y=1+3*k;wall2(B,6,0,12,true,y,k,stone);}
-  for(let x=7;x<=17;x+=2)B.add('b',x,0,16,1,1,stone(x,0,16));
-  // donjon
-  const kh=[[11,10,1,2,1,9],[9,10,13,2,1,6],[13,10,13,2,1,6],[8,6,13,1,2,6],[15,6,13,1,2,6]];
-  const kskip=(x,z,y)=>kh.some(([hx,hz,hy,hw,hd,hh])=>x>=hx&&x<hx+hw&&z>=hz&&z<hz+hd&&y>=hy&&y<hy+hh);
-  for(let k=0;k<8;k++){
-    const y=1+3*k;
-    wallLayer(B,8,3,8,8,y,k,stone,kskip);
-    if(k===0)B.add('dr',11,10,1,2,1,'brown');
-    if(k===4){B.add('v',9,10,13,2,1,'dgray').add('v',13,10,13,2,1,'dgray').add('v',8,6,13,1,2,'dgray').add('v',15,6,13,1,2,'dgray');}
-  }
-  B.region('p',25,rect(7,2,10,10),'dgray');
-  const kp=[];for(let x=7;x<17;x++){kp.push([x,2]);kp.push([x,11]);}for(let z=3;z<11;z++){kp.push([7,z]);kp.push([16,z]);}
-  kp.filter(([x,z])=>(x+z)%2===0).forEach(([x,z])=>B.add('b',x,z,26,1,1,stone(x,z,26)));
-  B.add('c',11,6,26,1,1,'dgray').add('c',11,6,29,1,1,'dgray').add('fg',11,6,32,1,1,'blue');
-  // binnenplaats
-  B.add('c',4,13,1,2,2,'dgray').add('cp',4,13,4,2,2,'blue');                    // waterput
-  B.add('c',18,12,1,1,1,'brown').add('c',19,12,1,1,1,'brown').add('c',18,13,1,1,1,'brown').add('c',18,12,4,1,1,'brown');
-  B.add('b',3,8,1,2,2,'yellow').add('b',3,8,4,1,2,'yellow');                    // hooi
-  B.add('fl',6,17,1,1,1,'red').add('fl',17,17,1,1,1,'yellow');
-  B.add('bu',-3,20,0,2,2,'green').add('bu',25,4,0,2,2,'bgreen').add('bu',25,14,0,2,2,'green');
+  tower(2,4,9,true);
+  tower(20,2,11,false);
+  tower(11,0,13,false);
+  // twee ronde torentjes aan de voorkant
+  for(const x of [3,20]){for(let k=0;k<7;k++)B.add('c',x,11,Y+3*k,2,2,k%2?'lgray':'dtan');B.add('cp',x,11,Y+21,2,2,'dgray').add('c',x,11,Y+22,2,2,'slate').add('k',x,11,Y+25,2,2,'slate');}
+  // binnenplaats: kasseien, lantaarns, bomen
+  for(const [x,z] of rect(6,12,13,2))if(hash(x,z,11)<0.5&&!((x===9||x===15)&&z===13))B.add('tr',x,z,10,1,1,hash(x,z,12)<0.5?'lgray':'dtan');
+  B.add('lp',9,13,10,1,1,'black').add('lp',15,13,10,1,1,'black');
+  B.add('pl',22,10,10,2,2,'dgreen').add('pl',2,1,10,2,2,'dgreen').add('bu',23,12,10,2,2,'green');
+  // bootjes met lantaarns op het meer
+  for(const [x,z] of [[4,18],[10,19],[16,17],[21,19]]){B.add('p',x,z,1,2,1,'brown').add('cs',x+2,z,1,1,1,'brown',1).add('cs',x-1,z,1,1,1,'brown',3).add('cp',x,z,2,1,1,'lamp').add('t',x+1,z,2,1,1,'dbrown');}
+  for(const [x,z] of [[1,20],[13,20],[19,16],[7,16]])B.add('pt',x,z,1,2,1,'dblue',0,'water');
   return B.raw;
 }
 
 const SETS=[
   {id:'pot',name:'Bloempot',no:1001,age:'5+',box:'#f6c7a9',price:0,
-   blurb:'Een terracotta potje met drie vrolijke bloemen. Het perfecte eerste bouwwerk.',raw:setPot()},
+   blurb:'Een terracotta potje met een ronde rand, plantjes en twee bloemen. Het perfecte eerste bouwwerk.',raw:setPot()},
   {id:'tree',name:'Appelboom',no:1002,age:'6+',box:'#bfe3b4',price:150,
-   blurb:'Een stevige boom vol appels, met wortels, bloemetjes en een gevallen appel in het gras.',raw:setTree()},
-  {id:'car',name:'Rode cabrio',no:1003,age:'6+',box:'#f7b3ad',price:250,
-   blurb:'Dak open, zon op je gezicht. Met zachte zetels, koplampen en een stuur.',raw:setCar()},
-  {id:'cat',name:'Marcel de kat',no:1004,age:'8+',box:'#c9d3e6',price:400,
+   blurb:'Een bolle boom vol appels, met wortels, bloemetjes en een gevallen appel in het gras.',raw:setTree()},
+  {id:'delorean',name:'Tijdreisauto',no:2002,age:'8+',box:'#c9d0db',price:300,film:'Back to the Future',
+   blurb:'Roestvrij staal, lamellen op de motorkap en de fluxcondensator aan. Met vuursporen op de weg.',raw:setDelorean()},
+  {id:'cat',name:'Marcel de kat',no:1004,age:'8+',box:'#c9d3e6',price:450,
    blurb:'Onze grijze British Shorthair op zijn lievelingskussen, met koperkleurige ogen en zijn bolletje wol.',raw:setCat()},
-  {id:'rocket',name:'Raket',no:1005,age:'8+',box:'#b9c9ec',price:480,
-   blurb:'Drie, twee, één... Een raket met zijraketten, vinnen en een lanceertoren.',raw:setRocket()},
-  {id:'house',name:'Huisje',no:1006,age:'9+',box:'#f3dca4',price:560,
-   blurb:'Een knus huisje met puntgevel, schoorsteen, tuinhekje en een brievenbus.',raw:setHouse()},
-  {id:'xmas',name:'Kerstboom',no:1007,age:'9+',box:'#bfe0cf',price:850,
-   blurb:'Een grote kerstboom vol ballen, met een gouden ster en cadeautjes eronder.',raw:setXmas()},
+  {id:'friends',name:'Koffiehuis met oranje bank',no:2003,age:'10+',box:'#f2c7a2',price:600,film:'Friends',
+   blurb:'De bekendste bank van New York, met salontafel, toog, espressomachine en bakstenen muren.',raw:setFriends()},
+  {id:'xmas',name:'Kerstboom',no:1007,age:'9+',box:'#bfe0cf',price:800,
+   blurb:'Een grote kerstboom met ronde takken, ballen, een gouden ster en cadeautjes eronder.',raw:setXmas()},
   {id:'light',name:'Vuurtoren',no:1008,age:'10+',box:'#a9d6ef',price:1000,
    blurb:'Een rood-wit gestreepte vuurtoren op de rotsen, met een lichtgevende lantaarn en een bootje.',raw:setLight()},
-  {id:'cafe',name:'Koffiebar',no:1009,age:'12+',box:'#d7e6c8',price:1250,
-   blurb:'Een hoekcafé met gestreepte luifel, dambordvloer, terras met parasol en een appartement erboven.',raw:setCafe()},
-  {id:'castle',name:'Kasteel',no:1010,age:'14+',box:'#cdd2dc',price:1900,
-   blurb:'Het grote werk: vier torens, een poort met ophaalbrug, kantelen, een donjon en wapperende vlaggen.',raw:setCastle()}
+  {id:'brugge',name:'Brugse gevels',no:2004,age:'12+',box:'#c6dbe8',price:1200,
+   blurb:'Drie huisjes met trapgevels aan de reien, met kasseien, lantaarns en een rondvaartbootje.',raw:setBrugge()},
+  {id:'up',name:'Huis met ballonnen',no:2001,age:'12+',box:'#bfe0f0',price:1500,film:'Up',
+   blurb:'Het huisje dat de lucht in vliegt, met veranda, puntgevel, schoorsteen en een wolk van ballonnen.',raw:setUp()},
+  {id:'school',name:'Tovenaarsschool',no:2005,age:'14+',box:'#b8bfd8',price:2000,film:'Harry Potter',
+   blurb:'Een tovenaarskasteel op de rotsen boven het meer: grote zaal met verlichte ramen, drie torens met spitse daken, een klok en bootjes met lantaarns.',raw:setSchool()}
 ];
 // ==== SETS-END ====
 </script>
@@ -867,27 +907,38 @@ function fresh(){return {coins:0,owned:[],built:{},prog:{},gift:'',mute:false};}
 function load(){
   try{
     const s=JSON.parse(localStorage.getItem(KEY));
-    if(s&&typeof s==='object')return {...fresh(),...s,owned:Array.isArray(s.owned)?s.owned:[],built:s.built||{},prog:s.prog||{}};
+    if(s&&typeof s==='object')return {...fresh(),v:1,...s,owned:Array.isArray(s.owned)?s.owned:[],built:s.built||{},prog:s.prog||{}};
   }catch(e){}
   return fresh();
 }
 let S=load();
+if(S.v===undefined)S.v=2;
+// migratie naar de moderne sets (v2): oude sets krijgen hun opvolger, de raket wordt terugbetaald
+if(S.v===1){
+  const MAP={car:'delorean',house:'up',cafe:'friends',castle:'school'},REFUND={rocket:480};
+  const own=new Set();for(const id of S.owned){if(MAP[id])own.add(MAP[id]);else if(REFUND[id])S.coins+=REFUND[id];else own.add(id);}
+  S.owned=[...own];const built={};for(const [id,n] of Object.entries(S.built)){built[MAP[id]||id]=(built[MAP[id]||id]||0)+n;}
+  S.built=built;S.prog={};S.v=2;
+  try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function loadFree(){try{const a=JSON.parse(localStorage.getItem(FREEKEY));if(Array.isArray(a))return a;}catch(e){}return [];}
 function saveFree(a){try{localStorage.setItem(FREEKEY,JSON.stringify(a));}catch(e){}}
 
 // ================= Sets voorbereiden =================
 const BOXLIKE=new Set(['b','p','t','c','cp','k','d','bu','fl','st']);
-const LONG=new Set(['v','dr','a','e','fg','w']);
-function sigOf(b){let w=b.w,d=b.d;if(b.t!=='s'&&w>d){const t=w;w=d;d=t;}return b.t+':'+w+'x'+d+':'+b.c+(b.lab?':'+b.lab:'');}
+const LONG=new Set(['v','dr','a','e','fg','w','m']);
+function sigOf(b){let w=b.w,d=b.d;if(!DIRT.has(b.t)&&w>d){const t=w;w=d;d=t;}return b.t+':'+w+'x'+d+':'+b.c+(b.lab&&b.t!=='bl'?':'+b.lab:'');}
 function protoOf(sig){
   const [t,wd,c,...rest]=sig.split(':');const [w,d]=wd.split('x').map(Number);const lab=rest.length?rest.join(':'):undefined;
-  if(t==='s')return P([t,0,0,0,w,d,c,0,lab]);
+  if(DIRT.has(t))return P([t,0,0,0,w,d,c,0,lab]);
   return P([t,0,0,0,Math.max(w,d),Math.min(w,d),c,0,lab]);
 }
 const TNAME={b:'steen',p:'plaat',t:'tegel',s:'schuine steen',c:'ronde steen',cp:'rond plaatje',k:'kegel',d:'koepel',
-  a:'boog',v:'raam',dr:'deur',fl:'bloemetje',bu:'struikje',e:'bedrukte steen',fg:'vlag',st:'ster',w:'wiel'};
-function nameOf(b){const n=TNAME[b.t];const size=(['fl','bu','fg','st','w'].includes(b.t))?'':' '+Math.min(b.w,b.d)+'×'+Math.max(b.w,b.d);return n+size+' '+(COLN[b.c]||'');}
+  a:'boog',v:'raam',dr:'deur',fl:'bloemetje',bu:'struikje',e:'bedrukte steen',fg:'vlag',st:'ster',w:'wiel',
+  cs:'gebogen schuine steen',sc:'kaasje',tr:'ronde tegel',tq:'kwartronde tegel',wp:'wigplaat',is:'omgekeerde schuine steen',
+  m:'metselsteen',g:'roostertegel',pt:'bedrukte tegel',pl:'plantje',bl:'ballon',lp:'lantaarnpaal',j:'jumperplaat'};
+function nameOf(b){const n=TNAME[b.t];const size=(['fl','bu','fg','st','w','pl','bl','lp'].includes(b.t))?'':' '+Math.min(b.w,b.d)+'×'+Math.max(b.w,b.d);return n+size+' '+(COLN[b.c]||'');}
 const BIGPART=p=>p.X*p.Z>=24||p.t==='e'||p.t==='st'||p.t==='dr';
 function makeSteps(parts){
   const steps=[];let cur=null;
@@ -977,6 +1028,32 @@ function gmat(c){
   return GHOST[c]=new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:0.25,transparent:true,opacity:0.35,depthWrite:false,roughness:0.5,envMapIntensity:ENVI});
 }
 const DECAL={};
+// bedrukkingen voor tegels en stenen (eigen tekeningen)
+const PRINTS={
+  menu(g,w,h){g.fillStyle='#2b2f2c';g.fillRect(w*.06,h*.06,w*.88,h*.88);g.strokeStyle='#8a6a3a';g.lineWidth=h*.06;g.strokeRect(w*.06,h*.06,w*.88,h*.88);
+    g.fillStyle='#f4f1e8';g.font='700 '+h*.16+'px Figtree,sans-serif';g.textAlign='center';g.fillText('MENU',w/2,h*.3);
+    g.fillStyle='rgba(244,241,232,.75)';for(let i=0;i<3;i++)g.fillRect(w*.2,h*(.45+i*.14),w*(.6-i*.08),h*.05);},
+  klok(g,w,h){const r=Math.min(w,h)*.42;g.fillStyle='#fdfaf2';g.beginPath();g.arc(w/2,h/2,r,0,7);g.fill();g.strokeStyle='#27292d';g.lineWidth=r*.12;g.stroke();
+    g.lineWidth=r*.1;g.lineCap='round';g.beginPath();g.moveTo(w/2,h/2);g.lineTo(w/2,h/2-r*.6);g.moveTo(w/2,h/2);g.lineTo(w/2+r*.45,h/2+r*.1);g.stroke();},
+  schilderij(g,w,h){g.fillStyle='#c9a13f';g.fillRect(0,0,w,h);g.fillStyle='#2f5d8a';g.fillRect(w*.1,h*.1,w*.8,h*.8);
+    g.fillStyle='#f6d36b';g.beginPath();g.arc(w*.7,h*.35,h*.12,0,7);g.fill();g.fillStyle='#3d7a3f';g.beginPath();g.moveTo(w*.1,h*.9);g.lineTo(w*.4,h*.45);g.lineTo(w*.65,h*.9);g.fill();},
+  tapijt(g,w,h,c){g.fillStyle='rgba(255,255,255,.0)';g.strokeStyle='rgba(255,240,220,.85)';g.lineWidth=Math.min(w,h)*.05;
+    g.strokeRect(w*.1,h*.1,w*.8,h*.8);g.strokeRect(w*.22,h*.22,w*.56,h*.56);g.fillStyle='rgba(255,240,220,.85)';g.beginPath();g.arc(w/2,h/2,Math.min(w,h)*.1,0,7);g.fill();},
+  boeken(g,w,h){const cs=['#c91a09','#0055bf','#237841','#f2cd37','#7f1310','#6a7fa8'];const n=Math.round(w/22);for(let i=0;i<n;i++){g.fillStyle=cs[i%cs.length];g.fillRect(i*w/n+2,h*(.1+((i*7)%3)*.05),w/n-4,h*.9);}},
+  tv(g,w,h){g.fillStyle='#1a1d22';g.fillRect(0,0,w,h);const gr=g.createLinearGradient(0,0,w,h);gr.addColorStop(0,'#5fb7e6');gr.addColorStop(1,'#2a4f8f');g.fillStyle=gr;g.fillRect(w*.08,h*.12,w*.84,h*.76);},
+  flux(g,w,h){g.fillStyle='#2a2d33';g.fillRect(0,0,w,h);g.strokeStyle='#9fe9ff';g.shadowColor='#58d8ff';g.shadowBlur=h*.15;g.lineWidth=h*.1;g.lineCap='round';
+    const cx=w/2,cy=h*.55;for(const a of [-Math.PI/2,Math.PI/6,5*Math.PI/6]){g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(a)*h*.38,cy+Math.sin(a)*h*.38);g.stroke();}g.shadowBlur=0;},
+  kenteken(g,w,h){g.fillStyle='#f4f1e8';g.fillRect(w*.08,h*.2,w*.84,h*.6);g.fillStyle='#b5121b';g.font='800 '+h*.36+'px Figtree,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('OUTATIME',w/2,h*.52);},
+  koffie(g,w,h){g.fillStyle='#5a3a24';const r=Math.min(w,h);g.beginPath();g.ellipse(w/2,h*.55,r*.28,r*.22,0,0,7);g.fill();g.fillStyle='#e9d6b9';g.beginPath();g.ellipse(w/2,h*.5,r*.2,r*.12,0,0,7);g.fill();},
+  pizza(g,w,h){const r=Math.min(w,h)*.45;g.fillStyle='#e7b45a';g.beginPath();g.arc(w/2,h/2,r,0,7);g.fill();g.fillStyle='#d94a2a';g.beginPath();g.arc(w/2,h/2,r*.82,0,7);g.fill();
+    g.fillStyle='#f6e2a8';for(let i=0;i<6;i++){g.beginPath();g.arc(w/2+Math.cos(i)*r*.45,h/2+Math.sin(i*1.7)*r*.4,r*.12,0,7);g.fill();}},
+  water(g,w,h){g.strokeStyle='rgba(255,255,255,.55)';g.lineWidth=h*.05;g.lineCap='round';for(let i=0;i<3;i++){const y=h*(.25+i*.25);g.beginPath();g.moveTo(w*.15+i*w*.1,y);g.quadraticCurveTo(w*.35,y-h*.1,w*.55+i*w*.05,y);g.stroke();}},
+  ramen(g,w,h){g.fillStyle='#bfe6f0';const n=Math.max(1,Math.round(w/80));for(let i=0;i<n;i++){g.fillRect(i*w/n+w/n*.2,h*.18,w/n*.6,h*.64);}g.fillStyle='rgba(255,255,255,.6)';for(let i=0;i<n;i++)g.fillRect(i*w/n+w/n*.25,h*.22,w/n*.12,h*.4);},
+  luik(g,w,h){g.strokeStyle='rgba(0,0,0,.28)';g.lineWidth=h*.035;for(let i=1;i<6;i++){g.beginPath();g.moveTo(w*.1,h*i/6);g.lineTo(w*.9,h*i/6);g.stroke();}},
+  wapen(g,w,h){g.fillStyle='#7f1310';g.beginPath();g.moveTo(w*.25,h*.12);g.lineTo(w*.75,h*.12);g.lineTo(w*.75,h*.55);g.quadraticCurveTo(w*.75,h*.85,w/2,h*.92);g.quadraticCurveTo(w*.25,h*.85,w*.25,h*.55);g.fill();
+    g.fillStyle='#c9a13f';g.font='800 '+h*.42+'px "Bricolage Grotesque",serif';g.textAlign='center';g.textBaseline='middle';g.fillText('T',w/2,h*.5);},
+  bord(g,w,h){g.fillStyle='#7a5432';g.fillRect(w*.05,h*.15,w*.9,h*.7);g.fillStyle='#f3e3c3';g.font='700 '+h*.3+'px Figtree,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('9 ¾',w/2,h*.52);}
+};
 function decalMat(lab,c,L,H){
   const k=lab+'|'+c+'|'+L+'|'+H;if(DECAL[k])return DECAL[k];
   const cw=Math.round(160*L),ch=Math.round(160*H),cv=document.createElement('canvas');cv.width=cw;cv.height=ch;
@@ -999,6 +1076,7 @@ function decalMat(lab,c,L,H){
     g.beginPath();g.arc(cx+s*0.75,ny+s*1.7,s*0.75,0.4,Math.PI-0.1);g.stroke();
     g.strokeStyle='rgba(245,247,250,.9)';g.lineWidth=ch*0.022;
     for(const sd of [-1,1])for(const k of [-1,0,1]){g.beginPath();g.moveTo(cx+sd*s*1.6,ny+s*0.9+k*s*0.45);g.quadraticCurveTo(cx+sd*cw*0.32,ny+s*0.7+k*s*0.7,cx+sd*cw*0.47,ny+s*0.5+k*s*1.0);g.stroke();}
+  }else if(PRINTS[lab]){PRINTS[lab](g,cw,ch,c);
   }else if(lab&&lab.startsWith('txt:')){
     const txt=lab.slice(4),dark=['white','tan','yellow','lgray','lblue','pink'].includes(c);
     g.fillStyle=dark?'#27292d':'#fdfcf7';
@@ -1048,6 +1126,20 @@ function slopeG(w,d,h){
   ex.rotateY(-Math.PI/2);ex.computeBoundingBox();
   const bb=ex.boundingBox;ex.translate(-(bb.min.x+bb.max.x)/2,0,-d/2);ex.deleteAttribute('uv');return ex;
 }
+// profiel (u = diepte van achter naar voor, v = hoogte) uitgetrokken over de breedte
+function profG(w,d,pts,bev){
+  const b=bev===undefined?0.015:bev,g=GAP+b,sh=new THREE.Shape();
+  pts.forEach(([u,v],i)=>{const uu=Math.min(d-g,Math.max(g,u)),vv=v;i?sh.lineTo(uu,vv):sh.moveTo(uu,vv);});
+  const ex=new THREE.ExtrudeGeometry(sh,{depth:w-2*g,bevelEnabled:b>0,bevelThickness:b,bevelSize:b,bevelSegments:1,curveSegments:1});
+  ex.rotateY(-Math.PI/2);ex.computeBoundingBox();const bb=ex.boundingBox;ex.translate(-(bb.min.x+bb.max.x)/2,0,-d/2);ex.deleteAttribute('uv');return ex;
+}
+// vlakke vorm (u,v in noppen vanaf achter-links) als plaat met hoogte H
+function flatG(w,d,pts,H){
+  const b=Math.min(0.025,H*0.2),sh=new THREE.Shape();
+  pts.forEach(([u,v],i)=>{const x=u-w/2,y=-(v-d/2);i?sh.lineTo(x,y):sh.moveTo(x,y);});
+  const g=new THREE.ExtrudeGeometry(sh,{depth:Math.max(0.001,H-2*b),bevelEnabled:true,bevelThickness:b,bevelSize:b,bevelSegments:2,curveSegments:1});
+  g.rotateX(-Math.PI/2);g.translate(0,b,0);g.deleteAttribute('uv');return g;
+}
 function archG(L,H){
   const g=GAP,hw=(L-2)/2,top=H-0.32,leg=Math.min(0.18,H*0.12),s=new THREE.Shape(),xl=-L/2+g,xr=L/2-g;
   s.moveTo(xl,0);s.lineTo(-hw,0);s.lineTo(-hw,leg);
@@ -1061,7 +1153,7 @@ function at(g,x,y,z){g.translate(x,y,z);return g;}
 function partData(b){
   const L=Math.max(b.w,b.d),long=LONG.has(b.t);
   const cw=b.t==='w'?2:long?L:b.w, cd=b.t==='w'?1:long?1:b.d, h=b.h, H=h*PH;
-  const key=b.t+'|'+cw+'|'+cd+'|'+h+'|'+(b.t==='e'?b.lab:'');
+  const key=b.t+'|'+cw+'|'+cd+'|'+h+'|'+(['e','pt','wp','bl','v'].includes(b.t)?b.lab:'');
   if(GC[key])return GC[key];
   const body=[],studs=[];let sr=SR,sh=SH;
   const grid=()=>{for(let i=0;i<cw;i++)for(let j=0;j<cd;j++)studs.push([i+0.5-cw/2,H,j+0.5-cd/2]);};
@@ -1083,13 +1175,57 @@ function partData(b){
     case 'v':{const f=0.16,sill=0.36,top=0.24;
       body.push({g:mergeGeos([boxG(cw,1,sill),at(boxG(cw,1,top),0,H-top,0),at(boxG(f,0.8,H-sill-top,0.02),-cw/2+f/2+GAP,sill,0),at(boxG(f,0.8,H-sill-top,0.02),cw/2-f/2-GAP,sill,0),
         at(boxG(0.08,0.14,H-sill-top,0.01),0,sill,0),at(boxG(cw-2*f,0.14,0.08,0.01),0,(H+sill-top)/2,0)]),m:'main'});
-      body.push({g:at(new THREE.BoxGeometry(cw-2*f,H-sill-top,0.05),0,(H+sill-top)/2,0),m:'tlblue'});grid();break;}
+      body.push({g:at(new THREE.BoxGeometry(cw-2*f,H-sill-top,0.05),0,(H+sill-top)/2,0),m:b.lab==='licht'?'lamp':'tlblue'});grid();break;}
     case 'dr':{const f=0.14,top=0.24;
       body.push({g:mergeGeos([at(boxG(cw,1,top),0,H-top,0),at(boxG(f,1,H-top,0.02),-cw/2+f/2+GAP,0,0),at(boxG(f,1,H-top,0.02),cw/2-f/2-GAP,0,0)]),m:'white'});
       const pw=cw-2*f-0.03,ph=H-top-0.02;
       body.push({g:mergeGeos([boxG(pw,0.44,ph,0.02),at(boxG(pw*0.7,0.05,ph*0.32,0.01),0,ph*0.1,0.23),at(boxG(pw*0.7,0.05,ph*0.38,0.01),0,ph*0.52,0.23)]),m:'main'});
       const kn=new THREE.SphereGeometry(0.07,12,8);kn.translate(pw/2-0.18,ph*0.47,0.3);body.push({g:kn,m:'gold'});grid();break;}
     case 'a':body.push({g:archG(cw,H),m:'main'});grid();break;
+    case 'cs':{const g=GAP+0.015,lip=0.07,pts=[[0,0.015],[cd,0.015],[cd,lip]];
+      for(let i=1;i<=14;i++){const a=Math.PI/2*i/14;pts.push([g+(cd-2*g)*Math.cos(a),lip+(H-0.015-lip)*Math.sin(a)]);}
+      pts.push([0,H-0.015]);body.push({g:profG(cw,cd,pts),m:'main'});break;}
+    case 'sc':body.push({g:profG(cw,cd,[[0,0.015],[cd,0.015],[cd,0.06],[0,H-0.015]]),m:'main'});break;
+    case 'is':body.push({g:profG(cw,cd,[[0,0.015],[Math.min(1,cd),0.015],[cd,H-0.16],[cd,H-0.015],[0,H-0.015]]),m:'main'});grid();break;
+    case 'tr':{const r=cw/2-GAP-0.01;body.push({g:lathe([[0,0],[r-0.03,0],[r,0.03],[r,H-0.03],[r-0.03,H],[0,H]],cw>1?36:24),m:'main'});break;}
+    case 'tq':{const R=cw-GAP-0.03,pts=[[GAP,GAP]];for(let i=0;i<=14;i++){const a=Math.PI/2*i/14;pts.push([GAP+R*Math.cos(a),GAP+R*Math.sin(a)]);}
+      body.push({g:flatG(cw,cd,pts,H),m:'main'});break;}
+    case 'wp':{const c=Math.min(cw,cd),mir=b.lab==='m',e=GAP+0.025;
+      let pts=[[e,e],[cw-e,e],[cw-e,cd-c+e*0.4],[cw-c+e*0.4,cd-e],[e,cd-e]];
+      if(mir)pts=pts.map(([u,v])=>[cw-u,v]).reverse();
+      body.push({g:flatG(cw,cd,pts,H),m:'main'});
+      for(let i=0;i<cw;i++)for(let j=0;j<cd;j++)if(wpInside({w:cw,d:cd,lab:b.lab},i,j))studs.push([i+0.5-cw/2,H,j+0.5-cd/2]);break;}
+    case 'm':{const parts=[boxG(cw,0.86,H)],ch=(H-0.02)/2;
+      for(const sd of [-1,1])for(let r=0;r<2;r++){
+        const xs=r===0?[...Array(cw)].map((_,i)=>[i,1]):[[0,0.5],...[...Array(cw-1)].map((_,i)=>[i+0.5,1]),[cw-0.5,0.5]];
+        for(const [x0,len] of xs){const q=new THREE.BoxGeometry(len-0.08,ch-0.08,0.07);q.translate(-cw/2+x0+len/2,0.01+ch*r+ch/2,sd*(0.43+0.03));parts.push(q);}
+      }
+      body.push({g:mergeGeos(parts),m:'main'});grid();break;}
+    case 'g':{const parts=[boxG(cw,cd,0.18,0.02)],alongX=cw>=cd,n=Math.round((alongX?cd:cw)*3),span=(alongX?cd:cw)-0.14;
+      for(let i=0;i<n;i++){const off=-span/2+span*(i+0.5)/n;const q=alongX?new THREE.BoxGeometry(cw-0.1,H-0.18,span/n*0.55):new THREE.BoxGeometry(span/n*0.55,H-0.18,cd-0.1);
+        q.translate(alongX?0:off,0.18+(H-0.18)/2-0.005,alongX?off:0);parts.push(q);}
+      body.push({g:mergeGeos(parts),m:'main'});break;}
+    case 'pt':{body.push({g:boxG(cw,cd,H),m:'main'});const pl=new THREE.PlaneGeometry(cw-0.1,cd-0.1);pl.rotateX(-Math.PI/2);pl.translate(0,H+0.003,0);
+      body.push({g:pl,m:'decal:'+b.lab});break;}
+    case 'j':{body.push({g:boxG(cw,cd,H),m:'main'});studs.push([0,H,0]);break;}
+    case 'pl':{const lv=[],n=cw>1?9:6,len=cw>1?1.05:0.55;
+      lv.push(at(new THREE.CylinderGeometry(0.12,0.16,0.35,10),0,0.17,0));
+      for(let i=0;i<n;i++){const q=new THREE.SphereGeometry(1,10,6);q.scale(len*0.26,0.035,len*0.5);q.translate(0,0,len*0.48);
+        q.rotateX(-(0.35+0.5*((i*0.37)%1)));q.rotateY(i*2.39996);q.translate(0,0.3+(i%3)*H*0.18,0);lv.push(q);}
+      body.push({g:mergeGeos(lv),m:'main'});break;}
+    case 'bl':{const v=parseInt(b.lab||'0',10)||0,ang=v*2.3,off=0.2+(v%3)*0.25,hy=H-0.7-(v%5)*0.55;
+      body.push({g:lathe([[0,0],[0.42,0],[0.45,0.03],[0.45,0.14],[0.42,0.17],[0,0.17]],20),m:'tclear'});
+      const bx=Math.cos(ang)*off,bz=Math.sin(ang)*off,str=new THREE.CylinderGeometry(0.012,0.012,1,5);
+      const len=Math.hypot(bx,hy-0.6-0.17,bz);str.translate(0,0.5,0);str.scale(1,len,1);
+      const q=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(bx,hy-0.6-0.17,bz).normalize());
+      str.applyMatrix4(new THREE.Matrix4().makeRotationFromQuaternion(q));str.translate(0,0.17,0);body.push({g:str,m:'white'});
+      const ba=new THREE.SphereGeometry(0.56,20,14);ba.scale(1,1.15,1);ba.translate(bx,hy,bz);
+      const kn=new THREE.ConeGeometry(0.08,0.12,10);kn.translate(bx,hy-0.66,bz);body.push({g:mergeGeos([ba,kn]),m:'main'});break;}
+    case 'lp':{body.push({g:lathe([[0,0],[0.4,0],[0.42,0.03],[0.42,0.3],[0.2,0.4],[0,0.4]],20),m:'main'});
+      body.push({g:at(new THREE.CylinderGeometry(0.07,0.09,H-1.3,10),0,0.4+(H-1.3)/2,0),m:'main'});
+      body.push({g:at(new THREE.CylinderGeometry(0.2,0.14,0.55,8),0,H-0.62,0),m:'lamp'});
+      body.push({g:lathe([[0,0],[0.3,0],[0.08,0.3],[0,0.32]],8).translate(0,H-0.34,0),m:'main'});break;}
+
     case 'fl':{const pet=[];for(let i=0;i<5;i++){const a=i/5*Math.PI*2;const c=new THREE.CylinderGeometry(0.17,0.15,0.1,14);c.translate(Math.cos(a)*0.2,0.3,Math.sin(a)*0.2);pet.push(c);}
       pet.push(at(new THREE.CylinderGeometry(0.2,0.25,0.25,14),0,0.125,0));body.push({g:mergeGeos(pet),m:'main'});
       body.push({g:at(new THREE.CylinderGeometry(0.12,0.12,0.14,14),0,0.38,0),m:b.c==='yellow'||b.c==='gold'?'orange':'yellow'});break;}
@@ -1117,14 +1253,14 @@ function partData(b){
 }
 const DIRROT=[0,Math.PI/2,Math.PI,-Math.PI/2];
 function rotOf(b){
-  if(b.t==='s'||b.t==='e'||b.t==='st')return DIRROT[b.dir||0];
+  if(DIRT.has(b.t)||b.t==='e'||b.t==='st')return DIRROT[b.dir||0];
   if(LONG.has(b.t))return b.d>b.w?Math.PI/2:0;
   return 0;
 }
 function resolveMat(m,b,D){
   if(m==='main')return mat(b.c);
   if(m==='mainDS')return matDS(b.c);
-  if(m.startsWith('decal:'))return decalMat(m.slice(6),b.c,D.cw,D.H);
+  if(m.startsWith('decal:'))return decalMat(m.slice(6),b.c,D.cw,b.t==='pt'?D.cd:D.H);
   return mat(m);
 }
 function partObject(b,ghost){
@@ -1283,6 +1419,7 @@ function renderHome(){
         ${built?`<span class="stamp"><svg width="10" height="10" viewBox="0 0 16 16"><path d="M3 8.5l3 3L13 4.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>${built>1?built+'× gebouwd':'Gebouwd'}</span>`:''}
         ${own?'':'<div class="lock"></div>'}</div>
       <div class="info"><b>${esc(s.name)}</b>
+        ${s.film?`<div class="film">geïnspireerd op ${esc(s.film)}</div>`:''}
         <div class="meta"><span>${s.parts.length} onderdelen</span><span>${s.bags.length} ${s.bags.length>1?'zakjes':'zakje'}</span></div>
         <p>${esc(s.blurb)}</p>
         ${prog>0?`<div class="bar"><i style="width:${pct}%"></i></div>`:''}
@@ -1329,7 +1466,7 @@ $('#home').addEventListener('click',e=>{
 let resetArm=false;
 $('#resetBtn').addEventListener('click',e=>{
   if(!resetArm){resetArm=true;e.target.textContent='Zeker? Tik nog eens om alles te wissen';setTimeout(()=>{resetArm=false;e.target.textContent='Voortgang wissen';},3000);return;}
-  S=fresh();save();saveFree([]);resetArm=false;e.target.textContent='Voortgang wissen';renderHome();toast('Alles staat terug op nul.');
+  S=fresh();S.v=2;save();saveFree([]);resetArm=false;e.target.textContent='Voortgang wissen';renderHome();toast('Alles staat terug op nul.');
 });
 
 // ================= Bouwscherm =================
@@ -1734,7 +1871,9 @@ $('#btnMute').addEventListener('click',()=>{S.mute=!S.mute;save();muteIcon();if(
 const FREEPARTS=[['b',1,1],['b',1,2],['b',1,3],['b',1,4],['b',1,6],['b',2,2],['b',2,3],['b',2,4],['b',2,6],
   ['p',1,1],['p',1,2],['p',1,4],['p',2,2],['p',2,4],['p',4,4],['p',6,6],['t',1,2],['t',2,2],
   ['s',2,2],['s',1,2],['s',2,1],['c',1,1],['c',2,2],['cp',1,1],['k',1,1],['d',2,2],['a',4,1],['v',2,1],['dr',2,1],
-  ['fl',1,1],['bu',2,2],['w',2,1]];
+  ['fl',1,1],['bu',2,2],['w',2,1],
+  ['cs',1,2],['cs',2,2],['sc',1,1],['tr',1,1],['tr',2,2],['tq',1,1],['wp',2,4],['is',1,2],['m',1,4],['m',1,2],['g',1,2],
+  ['pl',1,1],['pl',2,2],['bl',1,1],['lp',1,1],['j',1,2]];
 const BASECOL=['red','white','yellow','blue','black','lgray','bgreen','tan'];
 function freeColors(){
   const c=new Set(BASECOL);
@@ -1767,7 +1906,7 @@ $('#freebar').addEventListener('click',e=>{
   if(b.classList.contains('lockd')){toast('Bouw meer sets om '+COLN[b.dataset.c]+' vrij te spelen');return;}
   B.free.col=b.dataset.c;renderColors();renderPalette();
 });
-function freeSig(i){const [t,w,d]=FREEPARTS[i];return t+':'+(t==='s'?w+'x'+d:Math.min(w,d)+'x'+Math.max(w,d))+':'+B.free.col;}
+function freeSig(i){const [t,w,d]=FREEPARTS[i];return t+':'+(DIRT.has(t)?w+'x'+d:Math.min(w,d)+'x'+Math.max(w,d))+':'+B.free.col;}
 function renderPalette(){
   const list=$('#trayList');
   $('#bagChip').innerHTML=`<span class="bagchip"><i style="background:${COL[B.free.col]}"></i>${COLN[B.free.col]}</span>`;
@@ -1778,7 +1917,7 @@ function selectFree(el){B.free.sel=+el.dataset.i;document.querySelectorAll('#tra
 function freeProto(){
   const i=drag?+drag.el.dataset.i:B.free.sel,[t,w0,d0]=FREEPARTS[i],r=B.free.rot;
   let w=w0,d=d0,dir=0;
-  if(t==='s')dir=r;else if(r%2===1){w=d0;d=w0;}
+  if(DIRT.has(t))dir=r;else if(r%2===1){w=d0;d=w0;}
   B.free.sel=i;
   return P([t,0,0,0,w,d,B.free.col,dir]);
 }
